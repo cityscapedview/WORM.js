@@ -71,10 +71,9 @@ export class GradeLevel extends Base {
   // Question: should this instantiate an instance of each grade level and return that? or is this ok?
   static async fetchAll(db) {
     try {
-      const res = await db.query('SELECT * FROM grade_levels');
+      const res = await db.query("SELECT * FROM grade_levels");
 
       return res.rows;
-
     } catch (err) {
       console.error("error finding grade levels:", err);
     }

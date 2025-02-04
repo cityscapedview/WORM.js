@@ -51,10 +51,9 @@ export class School extends Base {
   // Question: should this instantiate an instance of each school and return that? or is this ok?
   static async fetchAll(db) {
     try {
-      const res = await db.query('SELECT * FROM schools');
+      const res = await db.query("SELECT * FROM schools");
 
       return res.rows;
-
     } catch (err) {
       console.error("error finding schools:", err);
     }
@@ -79,6 +78,30 @@ export class School extends Base {
       console.log("Save Successful:", res.rows[0]);
     } catch (err) {
       console.error("Error during upsert:", err);
+    }
+  }
+
+  async updateGradeLevels(db, gradeLevels) {
+    try {
+      gradeLevels.forEach( gl => {
+        const query = {
+          name: "update-grade-level",
+          text:  `
+            INSERT INTO school_grade_level_aff (school_id, grade_level_id)
+            VALUES ($1, $2)
+            ON CONFLICT (school_id)
+            DO UPDATE SET
+              school_id = EXCLUDED.school_id,
+              grade_level_id = $2,
+            RETURNING *;
+          `,
+          values: [gl.school_id, gl.grade_level_id],
+        };
+        const res = await db.query(query);
+        console.log("Updated grade level affiliation successfully:", res.rows[0]);
+      })
+    } catch (err) {
+      console.error("Error updating grade levels:", err);
     }
   }
 

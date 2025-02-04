@@ -19,9 +19,9 @@ import { Student } from "./Student.js";
 
   // 1) Create School
 
-  const school = await School.create(db, {
-    school_name: "Turtle Academy",
-  });
+  // const school = await School.create(db, {
+  //   school_name: "Turtle Academy",
+  // });
 
   // console.log("Below is the instantiated instance.");
   // console.log(school);
@@ -45,7 +45,7 @@ import { Student } from "./Student.js";
 
   // 2) Find method
 
-  // const school = await School.find(db, 1);
+  const school = await School.find(db, 1);
   // const gradeLevel = await GradeLevel.find(db, 1);
   // const student = await Student.find(db, 4);
 
@@ -74,7 +74,7 @@ import { Student } from "./Student.js";
 
   // 4) Save Method
 
-  const schoolChosen = await School.find(db, 1);
+  // const schoolChosen = await School.find(db, 1);
   // console.log(schoolChosen);
 
   // school.setData({ school_name: "AbaaaAaAak Uni" });
@@ -90,10 +90,17 @@ import { Student } from "./Student.js";
 
   // 5) FetchAll Method
 
-  const tallGrades = (await GradeLevel.fetchAll(db));
-  console.log(tallGrades)
-  const allGrades = (await GradeLevel.fetchAll(db)).map((gl) => gl.grade_level_name);
-  console.log(`${allGrades.join(", ")}`);
+  // const tallGrades = (await GradeLevel.fetchAll(db));
+  // console.log(tallGrades)
+  // const allGrades = (await GradeLevel.fetchAll(db)).map((gl) => gl.grade_level_name);
+  // console.log(`${allGrades.join(", ")}`);
+
+  // 6) updateGradeLevels Method
+
+  const kinder = await GradeLevel.findbyCode("K");
+  console.log(`before: ${kinder}`);
+  await school.updateGradeLevels([kinder]);
+  console.log(kinder);
 
   await db.end();
 })();
