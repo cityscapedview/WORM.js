@@ -47,6 +47,19 @@ export class School extends Base {
     }
   }
 
+  // TODO: abstract to base?
+  // Question: should this instantiate an instance of each school and return that? or is this ok?
+  static async fetchAll(db) {
+    try {
+      const res = await db.query('SELECT * FROM schools');
+
+      return res.rows;
+
+    } catch (err) {
+      console.error("error finding schools:", err);
+    }
+  }
+
   // TODO: abstract to base if possible
   // Different classes might need to change different values, could be a challenge.
   async save(db) {
