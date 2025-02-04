@@ -19,9 +19,9 @@ import { Student } from "./Student.js";
 
   // 1) Create School
 
-  // const school = await School.create(db, {
-  //   school_name: "Turtle Academy",
-  // });
+  const school = await School.create(db, {
+    school_name: "Turtle Academy",
+  });
 
   // console.log("Below is the instantiated instance.");
   // console.log(school);
@@ -32,8 +32,8 @@ import { Student } from "./Student.js";
   // 1) Create GradeLevel
 
   // const fourthGl = await GradeLevel.create(db, {
-  //   grade_level_code: "4",
-  //   grade_level_name: "4th Grade",
+  //   grade_level_code: "1",
+  //   grade_level_name: "1st Grade",
   // });
 
   // console.log("Below is the instantiated instance.");
@@ -74,17 +74,26 @@ import { Student } from "./Student.js";
 
   // 4) Save Method
 
-  const school = await School.find(db, 1);
-  school.setData({ school_name: "AbaaaAaAak Uni" });
+  const schoolChosen = await School.find(db, 1);
+  // console.log(schoolChosen);
+
+  // school.setData({ school_name: "AbaaaAaAak Uni" });
   // console.log(school.dynamicProperty);
-  await school.save(db);
-  console.log(school);
+  // await school.save(db);
+  // console.log(school);
 
   // const student = await Student.find(1);
   // student.setData({ student_name: "Alice A" });
   // student.setData({ grade_level_id: await GradeLevel.findByCode("1").getId() });
   // student.setData({ school_id: school.getId() });
   // await student.save();
+
+  // 5) FetchAll Method
+
+  const tallGrades = (await GradeLevel.fetchAll(db));
+  console.log(tallGrades)
+  const allGrades = (await GradeLevel.fetchAll(db)).map((gl) => gl.grade_level_name);
+  console.log(`${allGrades.join(", ")}`);
 
   await db.end();
 })();

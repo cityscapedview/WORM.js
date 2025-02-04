@@ -52,6 +52,19 @@ export class Student extends Base {
     }
   }
 
+  // TODO: abstract to base?
+  // Question: should this instantiate an instance of each student and return that? or is this ok?
+  static async fetchAll(db) {
+    try {
+      const res = await db.query('SELECT * FROM students');
+
+      return res.rows;
+
+    } catch (err) {
+      console.error("error finding students:", err);
+    }
+  }
+
   // TODO: abstract to base if possible
   // Different classes might need to change different values, could be a challenge.
   async save(db) {
