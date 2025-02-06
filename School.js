@@ -83,7 +83,7 @@ export class School extends Base {
 
   async updateGradeLevels(db, gradeLevels) {
     try {
-      gradeLevels.forEach( gl => {
+      const updatedGradeLevels = gradeLevels.map(gl => gl.gradeLevelId);
         const query = {
           name: "update-grade-level",
           text:  `
@@ -95,11 +95,10 @@ export class School extends Base {
               grade_level_id = $2,
             RETURNING *;
           `,
-          values: [gl.school_id, gl.grade_level_id],
+          values: [this.schoolId, updatedGradeLevels],
         };
         const res = await db.query(query);
         console.log("Updated grade level affiliation successfully:", res.rows[0]);
-      })
     } catch (err) {
       console.error("Error updating grade levels:", err);
     }

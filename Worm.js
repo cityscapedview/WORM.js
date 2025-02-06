@@ -45,7 +45,8 @@ import { Student } from "./Student.js";
 
   // 2) Find method
 
-  const school = await School.find(db, 1);
+  const school = await School.find(db, 2);
+  // console.log(school)
   // const gradeLevel = await GradeLevel.find(db, 1);
   // const student = await Student.find(db, 4);
 
@@ -97,10 +98,9 @@ import { Student } from "./Student.js";
 
   // 6) updateGradeLevels Method
 
-  const kinder = await GradeLevel.findbyCode("K");
-  console.log(`before: ${kinder}`);
-  await school.updateGradeLevels([kinder]);
-  console.log(kinder);
+  const kinder = await GradeLevel.findByCode(db, "K");
+  await school.updateGradeLevels(db, [kinder]);
+  console.log(`school after: ${school}`);
 
   await db.end();
 })();
