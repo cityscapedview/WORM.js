@@ -111,7 +111,7 @@ export class School extends Base {
         );
       }
 
-      this.save(db);
+      await this.save(db);
     } catch (err) {
       console.error("Error updating grade levels:", err);
     }
