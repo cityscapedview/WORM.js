@@ -51,10 +51,9 @@ export class School extends Base {
   // Question: should this instantiate an instance of each school and return that? or is this ok?
   static async fetchAll(db) {
     try {
-      const res = await db.query('SELECT * FROM schools');
+      const res = await db.query("SELECT * FROM schools");
 
       return res.rows;
-
     } catch (err) {
       console.error("error finding schools:", err);
     }
@@ -82,8 +81,58 @@ export class School extends Base {
     }
   }
 
+  async updateGradeLevels(db, gradeLevels) {
+    try {
+      // look up promises water falling.
+      // Really understand why you can't use map and for each.
+
+      // Look up 'bluebird' promise waterfalling.
+      //
+      // Use a for loop to iterate through, but understand why.  Also you can recursion.
+      //
+      // be careful on insert on conflict because you can run into instances like: (check discord)
+
+      // delete the existing rows first.
+
+      // delete all the values for the school first.
+
+      this.#deleteRow(db);
+
+      for (let i = 0; i < gradeLevels.length; i++) {
+        const query = {
+          name: "update-grade-level",
+          text: `INSERT INTO school_grade_level_aff (school_id, grade_level_id) VALUES ($1, $2)`,
+          values: [this.schoolId, gradeLevels[i].gradeLevelId],
+        };
+        const res = await db.query(query);
+        console.log(
+          "Updated grade level affiliation successfully:",
+          res.rowCount,
+        );
+      }
+
+      await this.save(db);
+    } catch (err) {
+      console.error("Error updating grade levels:", err);
+    }
+  }
+
   // TODO: abstract to base class
   getId() {
     return this.schoolId;
+  }
+
+  async #deleteRow(db) {
+    try {
+      const query = "DELETE FROM school_grade_level_aff WHERE school_id = $1";
+      const values = [this.schoolId];
+      const res = await db.query(query, values);
+      console.log(
+        "Deleted grade level affiliation rows successfully:",
+        res.rowCount,
+      );
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
   }
 }
