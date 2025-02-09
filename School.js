@@ -110,6 +110,8 @@ export class School extends Base {
           res.rowCount,
         );
       }
+
+      this.save(db);
     } catch (err) {
       console.error("Error updating grade levels:", err);
     }
