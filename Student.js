@@ -1,5 +1,6 @@
 import { Base } from "./Base.js";
 import { GradeLevel } from "./GradeLevel.js";
+import { School } from "./School.js";
 
 export class Student extends Base {
   constructor(row) {
@@ -87,7 +88,6 @@ export class Student extends Base {
     }
   }
 
-  // TODO: DRY this code with find
   async getGradeLevel(db) {
     try {
       const query = {
@@ -101,6 +101,24 @@ export class Student extends Base {
       const row = res.rows[0];
 
       return new GradeLevel(row);
+    } catch (err) {
+      console.error("Error finding grade level:", err);
+    }
+  }
+
+  async getSchool(db) {
+    try {
+      const query = {
+        name: "fetch-by-school-id",
+        text: "SELECT * FROM schools WHERE school_id = $1",
+        values: [this.schoolId],
+      };
+
+      const res = await db.query(query);
+
+      const row = res.rows[0];
+
+      return new School(row);
     } catch (err) {
       console.error("Error finding grade level:", err);
     }

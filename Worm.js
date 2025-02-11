@@ -108,11 +108,12 @@ import { Student } from "./Student.js";
 
   const alice = await Student.find(db, 4);
 
-  // const schoolName = (await alice.getSchool()).school_name;
-  // const gl = (await alice.getGradeLevel()).grade_level_name;
+  console.log(alice);
+
+  const schoolName = (await alice.getSchool(db)).schoolName;
   const gl = (await alice.getGradeLevel(db)).gradeLevelName;
 
-  console.log(gl);
+  console.log(schoolName);
 
   await db.end();
 })();
