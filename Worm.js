@@ -98,10 +98,21 @@ import { Student } from "./Student.js";
 
   // 6) updateGradeLevels Method
 
-  const kinder = await GradeLevel.findByCode(db, "K");
-  const first = await GradeLevel.findByCode(db, "1");
-  await school.updateGradeLevels(db, [kinder, first]);
+  // const kinder = await GradeLevel.findByCode(db, "K");
+  // const first = await GradeLevel.findByCode(db, "1");
+  // await school.updateGradeLevels(db, [kinder, first]);
   // console.log(`school after: ${school}`);
+  //
+
+  // 7) getSchool and getGradeLevel methods
+
+  const alice = await Student.find(db, 4);
+
+  // const schoolName = (await alice.getSchool()).school_name;
+  // const gl = (await alice.getGradeLevel()).grade_level_name;
+  const gl = (await alice.getGradeLevel(db)).gradeLevelName;
+
+  console.log(gl);
 
   await db.end();
 })();

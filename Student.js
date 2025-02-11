@@ -1,4 +1,5 @@
 import { Base } from "./Base.js";
+import { GradeLevel } from "./GradeLevel.js";
 
 export class Student extends Base {
   constructor(row) {
@@ -56,10 +57,9 @@ export class Student extends Base {
   // Question: should this instantiate an instance of each student and return that? or is this ok?
   static async fetchAll(db) {
     try {
-      const res = await db.query('SELECT * FROM students');
+      const res = await db.query("SELECT * FROM students");
 
       return res.rows;
-
     } catch (err) {
       console.error("error finding students:", err);
     }
@@ -84,6 +84,25 @@ export class Student extends Base {
       console.log("Save Successful:", res.rows[0]);
     } catch (err) {
       console.error("Error during upsert:", err);
+    }
+  }
+
+  // TODO: DRY this code with find
+  async getGradeLevel(db) {
+    try {
+      const query = {
+        name: "fetch-by-grade-level-id",
+        text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
+        values: [this.gradeLevelId],
+      };
+
+      const res = await db.query(query);
+
+      const row = res.rows[0];
+
+      return new GradeLevel(row);
+    } catch (err) {
+      console.error("Error finding grade level:", err);
     }
   }
 }
