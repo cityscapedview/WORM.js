@@ -123,4 +123,16 @@ export class Student extends Base {
       console.error("Error finding grade level:", err);
     }
   }
+
+  // TODO: abstract to base class and DRY
+  async delete(db) {
+    try {
+      const query = "DELETE FROM students WHERE student_id = $1";
+      const values = [this.studentId];
+      const res = await db.query(query, values);
+      console.log("Deleted student rows successfully:", res.rowCount);
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
+  }
 }

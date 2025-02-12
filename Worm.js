@@ -45,7 +45,7 @@ import { Student } from "./Student.js";
 
   // 2) Find method
 
-  const school = await School.find(db, 2);
+  // const school = await School.find(db, 2);
   // console.log(school)
   // const gradeLevel = await GradeLevel.find(db, 1);
   // const student = await Student.find(db, 4);
@@ -106,14 +106,24 @@ import { Student } from "./Student.js";
 
   // 7) getSchool and getGradeLevel methods
 
-  const alice = await Student.find(db, 4);
+  // const alice = await Student.find(db, 4);
 
-  console.log(alice);
+  // console.log(alice);
 
-  const schoolName = (await alice.getSchool(db)).schoolName;
-  const gl = (await alice.getGradeLevel(db)).gradeLevelName;
+  // const schoolName = (await alice.getSchool(db)).schoolName;
+  // const gl = (await alice.getGradeLevel(db)).gradeLevelName;
 
-  console.log(schoolName);
+  // console.log(schoolName);
+
+  // 8) delete function.
+
+  const kinder = await GradeLevel.findByCode(db, "K");
+  await kinder.delete(db);
+
+  const stu = await Student.find(1);
+  const school = await stu.getSchool(db);
+  await stu.delete(db);
+  await school.delete(db);
 
   await db.end();
 })();

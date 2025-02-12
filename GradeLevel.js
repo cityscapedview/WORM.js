@@ -79,6 +79,18 @@ export class GradeLevel extends Base {
     }
   }
 
+  // TODO: abstract to base class and DRY
+  async delete(db) {
+    try {
+      const query = "DELETE FROM grade_levels WHERE grade_level_id = $1";
+      const values = [this.gradeLevelId];
+      const res = await db.query(query, values);
+      console.log("Deleted grade level rows successfully:", res.rowCount);
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
+  }
+
   // TODO: abstract to base class
   getId() {
     return this.gradeLevelId;

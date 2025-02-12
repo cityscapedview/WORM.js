@@ -122,6 +122,18 @@ export class School extends Base {
     return this.schoolId;
   }
 
+  // TODO: abstract to base class and DRY
+  async delete(db) {
+    try {
+      const query = "DELETE FROM schools WHERE school_id = $1";
+      const values = [this.schoolId];
+      const res = await db.query(query, values);
+      console.log("Deleted school rows successfully:", res.rowCount);
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
+  }
+
   async #deleteRow(db) {
     try {
       const query = "DELETE FROM school_grade_level_aff WHERE school_id = $1";
