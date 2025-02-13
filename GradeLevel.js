@@ -82,6 +82,8 @@ export class GradeLevel extends Base {
   // TODO: abstract to base class and DRY
   async delete(db) {
     try {
+      this.#deleteGradeLevelAff(db);
+
       const query = "DELETE FROM grade_levels WHERE grade_level_id = $1";
       const values = [this.gradeLevelId];
       const res = await db.query(query, values);
@@ -94,6 +96,17 @@ export class GradeLevel extends Base {
   // TODO: abstract to base class
   getId() {
     return this.gradeLevelId;
+  }
+
+  async #deleteGradeLevelAff(db) {
+    try {
+      const query = "DELETE FROM school_grade_level_aff WHERE grade_level_id = $1";
+      const values = [this.gradeLevelId];
+      const res = await db.query(query, values);
+      console.log("Deleted grade level affiliate rows successfully:", res.rowCount);
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
   }
 
   // TODO: implement contstructor

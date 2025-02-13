@@ -120,10 +120,10 @@ import { Student } from "./Student.js";
   const kinder = await GradeLevel.findByCode(db, "K");
   await kinder.delete(db);
 
-  const stu = await Student.find(1);
-  const school = await stu.getSchool(db);
-  await stu.delete(db);
-  await school.delete(db);
+  // const stu = await Student.find(1);
+  // const school = await stu.getSchool(db);
+  // await stu.delete(db);
+  // await school.delete(db);
 
   await db.end();
 })();
