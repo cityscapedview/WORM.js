@@ -135,4 +135,44 @@ export class Student extends Base {
       console.error("Error deleting rows:", err);
     }
   }
+
+  async softDelete(db) {
+    try {
+      const query = `
+        UPDATE students
+        SET deleted_at = NOW()
+        WHERE student_id = $1 AND deleted_at IS NULL
+        RETURNING *;
+      `;
+      const values = [this.studentId];
+      const res = await db.query(query, values);
+      if (res.rowCount > 0) {
+        console.log("User soft deleted:", res.rows[0]);
+      } else {
+        console.log("User not found or already deleted");
+    } catch (err) {
+      console.error("Error soft deleting user:", err);
+    }
+    }
+  }
+
+  async restoreUser(db) {
+    try {
+      const query = `
+        UPDATE students
+        SET deleted_at = NULL
+        WHERE student_id = $1 AND deleted_at IS NULL
+        RETURNING *;
+      `;
+      const values = [this.studentId];
+      const res = await db.query(query, values);
+      if (res.rowCount > 0) {
+        console.log("User restored:", res.rows[0]);
+      } else {
+        console.log("User not found or not deleted");
+    } catch (err) {
+      console.error("Error restoring user:", err);
+    }
+    }
+  }
 }
