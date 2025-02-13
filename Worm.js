@@ -47,7 +47,7 @@ import { Student } from "./Student.js";
 
   const school = await School.find(db, 2);
   // console.log(school)
-  const gradeLevel = await GradeLevel.find(db, 3);
+  const gradeLevel = await GradeLevel.find(db, 2);
   // const student = await Student.find(db, 4);
 
   // console.log(student);
@@ -125,15 +125,15 @@ import { Student } from "./Student.js";
   // await stu.delete(db);
   // await school.delete(db);
 
-
   // 9) We need a way to soft delete and restore schools
   // and students via the softDelete and restore methods.
 
-  const stu = await Student.find(1);
-  await stu.softDelete();
+  const stu = await Student.find(db, 4);
+  console.log(stu);
+  await stu.softDelete(db);
   console.log(`${stu.student_name} was soft deleted on ${stu.deleted_at}`);
 
-  await stu.restore();
+  await stu.restore(db);
   console.log(`${stu.student_name} was restored. `);
 
   await db.end();

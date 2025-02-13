@@ -138,6 +138,7 @@ export class Student extends Base {
 
   async softDelete(db) {
     try {
+      console.log(this.studentId);
       const query = `
         UPDATE students
         SET deleted_at = NOW()
@@ -150,18 +151,19 @@ export class Student extends Base {
         console.log("User soft deleted:", res.rows[0]);
       } else {
         console.log("User not found or already deleted");
+      }
     } catch (err) {
       console.error("Error soft deleting user:", err);
     }
-    }
   }
 
-  async restoreUser(db) {
+  async restore(db) {
+    console.log(this.studentId);
     try {
       const query = `
         UPDATE students
         SET deleted_at = NULL
-        WHERE student_id = $1 AND deleted_at IS NULL
+        WHERE student_id = $1 AND deleted_at IS NOT NULL
         RETURNING *;
       `;
       const values = [this.studentId];
@@ -170,9 +172,9 @@ export class Student extends Base {
         console.log("User restored:", res.rows[0]);
       } else {
         console.log("User not found or not deleted");
+      }
     } catch (err) {
       console.error("Error restoring user:", err);
-    }
     }
   }
 }
