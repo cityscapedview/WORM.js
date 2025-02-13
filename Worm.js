@@ -45,9 +45,9 @@ import { Student } from "./Student.js";
 
   // 2) Find method
 
-  const school = await School.find(db, 2);
+  // const school = await School.find(db, 2);
   // console.log(school)
-  const gradeLevel = await GradeLevel.find(db, 2);
+  // const gradeLevel = await GradeLevel.find(db, 2);
   // const student = await Student.find(db, 4);
 
   // console.log(student);
@@ -59,11 +59,11 @@ import { Student } from "./Student.js";
   //   Instantiate a gradeLevel
   //
 
-  const student = await Student.create(db, {
-    student_name: "Alice",
-    school_id: school.getId(),
-    grade_level_id: gradeLevel.getId(),
-  });
+  // const student = await Student.create(db, {
+  //   student_name: "Alice",
+  //   school_id: school.getId(),
+  //   grade_level_id: gradeLevel.getId(),
+  // });
 
   // console.log(student);
 
@@ -128,13 +128,19 @@ import { Student } from "./Student.js";
   // 9) We need a way to soft delete and restore schools
   // and students via the softDelete and restore methods.
 
-  const stu = await Student.find(db, 4);
-  console.log(stu);
-  await stu.softDelete(db);
-  console.log(`${stu.student_name} was soft deleted on ${stu.deleted_at}`);
+  // const stu = await Student.find(db, 4);
+  // await stu.softDelete(db);
+  // console.log(`${stu.student_name} was soft deleted on ${stu.deleted_at}`);
 
-  await stu.restore(db);
-  console.log(`${stu.student_name} was restored. `);
+  // await stu.restore(db);
+  // console.log(`${stu.student_name} was restored. `);
+
+  // const school = await School.find(db, 2);
+  // await school.softDelete(db);
+  // console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
+
+  // await school.restore(db);
+  // console.log(`${school.schoolName} was restored. `);
 
   await db.end();
 })();

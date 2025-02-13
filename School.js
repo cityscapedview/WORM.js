@@ -165,4 +165,44 @@ export class School extends Base {
       console.error("Error deleting rows:", err);
     }
   }
+
+  async softDelete(db) {
+    try {
+      const query = `
+        UPDATE schools
+        SET deleted_at = NOW()
+        WHERE school_id = $1 AND deleted_at IS NULL
+        RETURNING *;
+      `;
+      const values = [this.schoolId];
+      const res = await db.query(query, values);
+      if (res.rowCount > 0) {
+        console.log("School soft deleted:", res.rows[0]);
+      } else {
+        console.log("School not found or already deleted");
+      }
+    } catch (err) {
+      console.error("Error soft deleting school:", err);
+    }
+  }
+
+  async restore(db) {
+    try {
+      const query = `
+        UPDATE schools
+        SET deleted_at = NULL
+        WHERE school_id = $1 AND deleted_at IS NOT NULL
+        RETURNING *;
+      `;
+      const values = [this.schoolId];
+      const res = await db.query(query, values);
+      if (res.rowCount > 0) {
+        console.log("School restored:", res.rows[0]);
+      } else {
+        console.log("School not found or not deleted");
+      }
+    } catch (err) {
+      console.error("Error restoring school:", err);
+    }
+  }
 }

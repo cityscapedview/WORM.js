@@ -138,7 +138,6 @@ export class Student extends Base {
 
   async softDelete(db) {
     try {
-      console.log(this.studentId);
       const query = `
         UPDATE students
         SET deleted_at = NOW()
@@ -158,7 +157,6 @@ export class Student extends Base {
   }
 
   async restore(db) {
-    console.log(this.studentId);
     try {
       const query = `
         UPDATE students
