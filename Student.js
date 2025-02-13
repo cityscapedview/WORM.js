@@ -120,7 +120,7 @@ export class Student extends Base {
 
       return new School(row);
     } catch (err) {
-      console.error("Error finding grade level:", err);
+      console.error("Error finding school:", err);
     }
   }
 

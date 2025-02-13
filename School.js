@@ -125,6 +125,9 @@ export class School extends Base {
   // TODO: abstract to base class and DRY
   async delete(db) {
     try {
+      this.#deleteRow(db);
+      this.#deleteStudentRow(db);
+
       const query = "DELETE FROM schools WHERE school_id = $1";
       const values = [this.schoolId];
       const res = await db.query(query, values);
@@ -141,6 +144,21 @@ export class School extends Base {
       const res = await db.query(query, values);
       console.log(
         "Deleted grade level affiliation rows successfully:",
+        res.rowCount,
+      );
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
+  }
+
+  // Ask Zach if the intention is to delete all the students in the school?
+  async #deleteStudentRow(db) {
+    try {
+      const query = "DELETE FROM students WHERE school_id = $1";
+      const values = [this.schoolId];
+      const res = await db.query(query, values);
+      console.log(
+        "Deleted student row affiliated with school successfully:",
         res.rowCount,
       );
     } catch (err) {
