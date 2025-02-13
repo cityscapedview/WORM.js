@@ -32,8 +32,8 @@ import { Student } from "./Student.js";
   // 1) Create GradeLevel
 
   // const fourthGl = await GradeLevel.create(db, {
-  //   grade_level_code: "1",
-  //   grade_level_name: "1st Grade",
+  //   grade_level_code: "4",
+  //   grade_level_name: "4th Grade",
   // });
 
   // console.log("Below is the instantiated instance.");
@@ -47,7 +47,7 @@ import { Student } from "./Student.js";
 
   const school = await School.find(db, 2);
   // console.log(school)
-  // const gradeLevel = await GradeLevel.find(db, 1);
+  const gradeLevel = await GradeLevel.find(db, 3);
   // const student = await Student.find(db, 4);
 
   // console.log(student);
@@ -59,11 +59,11 @@ import { Student } from "./Student.js";
   //   Instantiate a gradeLevel
   //
 
-  // const student = await Student.create(db, {
-  //   student_name: "Alice",
-  //   school_id: school.getId(),
-  //   grade_level_id: gradeLevel.getId(),
-  // });
+  const student = await Student.create(db, {
+    student_name: "Alice",
+    school_id: school.getId(),
+    grade_level_id: gradeLevel.getId(),
+  });
 
   // console.log(student);
 
@@ -106,14 +106,27 @@ import { Student } from "./Student.js";
 
   // 7) getSchool and getGradeLevel methods
 
-  const alice = await Student.find(db, 4);
+  // const alice = await Student.find(db, 4);
 
-  console.log(alice);
+  // console.log(alice);
 
-  const schoolName = (await alice.getSchool(db)).schoolName;
-  const gl = (await alice.getGradeLevel(db)).gradeLevelName;
+  // const schoolName = (await alice.getSchool(db)).schoolName;
+  // const gl = (await alice.getGradeLevel(db)).gradeLevelName;
 
-  console.log(schoolName);
+  // console.log(schoolName);
+
+  // 8) delete function.
+
+  // const kinder = await GradeLevel.findByCode(db, "K");
+  // await kinder.delete(db);
+
+  // const stu = await Student.find(db, 3);
+  // const aSchool = await stu.getSchool(db);
+  // await stu.delete(db);
+  // await school.delete(db);
+
+
+  // 9) soft delete and restore methods.
 
   await db.end();
 })();
