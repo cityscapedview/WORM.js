@@ -1,5 +1,7 @@
 import { Base } from "./Base.js";
-import { db } from "./Database.js"
+import { getInstance } from "./Database.js";
+
+let db = getInstance();
 
 export class School extends Base {
   constructor(row) {
@@ -13,17 +15,30 @@ export class School extends Base {
 
   static async create(school) {
     // TODO: Let's abstract the values from the incoming object so it is clean code.
-    try {
-      const text = "INSERT INTO schools(school_name) VALUES($1) RETURNING *";
-      const values = [school.school_name];
 
-      const res = await db.query(text, values);
+    try {
+      db.connect();
+      // console.log(getInstance());
+      // console.log("inside");
+      // console.log(db);
+
+      const query = {
+        name: "create-school",
+        text: "INSERT INTO schools(school_name) VALUES($1) RETURNING *",
+        values: [this.school_name],
+      };
+      // const text = "INSERT INTO schools(school_name) VALUES($1) RETURNING *";
+      // const values = [school.school_name];
+
+      const res = await db.query(query);
 
       const row = res.rows[0];
 
       const schoolInstances = new School(row);
 
       return schoolInstances;
+      // won't run after return.
+      db.close();
     } catch (err) {
       console.error("Error creating school:", err);
     }

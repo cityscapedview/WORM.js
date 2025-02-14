@@ -1,32 +1,61 @@
 import pg from "pg";
 
+let db;
+
 class Database {
   constructor() {
-    if (Database.instance) {
-      return Database.instance;
-    }
-
-    this.con();
-
-    Database.instance = this;
+    this.client = new pg.Client({
+      connectionString: "postgres:postgres:postgres@localhost:5432/worm",
+    });
   }
 
+  newInstance() {
+    console.log("new instance");
+    console.log(db);
+  }
 
-  async con() {
+  oldInstance() {
+    console.log("old instance");
+    console.log(db);
+  }
+
+  async connect() {
     try {
-        const database = new pg.Client({
-        connectionString: "postgres://postgres:postgres@localhost:5432/worm",
-        });
-        await database.connect();
-        console.log('test');
-        console.log('Connected to the database');
+      await this.client.connect();
+      console.log("Connected to the database");
     } catch {
-        console.log('Connection error:', err);
+      console.log("Connection error:", err);
+    }
+  }
+
+  async query(query) {
+    try {
+      const result = await this.client.query(query);
+      return result;
+    } catch (error) {
+      console.error("Databse query error:", error);
+    }
+  }
+
+  async close() {
+    try {
+      await this.client.end();
+      console.log("Database connection closed");
+    } catch {
+      console.log("Connection error:", err);
     }
   }
 }
 
-const db = new Database();
-Object.freeze(db);
+function getInstance() {
+  if (db) {
+    db.oldInstance();
+    return db;
+  }
 
-export { db }
+  db = new Database();
+  db.newInstance();
+  return db;
+}
+
+export { getInstance };

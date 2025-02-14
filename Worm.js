@@ -2,7 +2,7 @@ import pg from "pg";
 import { School } from "./School.js";
 import { GradeLevel } from "./GradeLevel.js";
 import { Student } from "./Student.js";
-import { db } from "./Database.js"
+import { getInstance } from "./Database.js";
 
 (async () => {
   // Now you got a database connection to work with
@@ -138,5 +138,5 @@ import { db } from "./Database.js"
   // await school.restore(db);
   // console.log(`${school.schoolName} was restored. `);
 
-  await db.end();
+  // await db.end();
 })();
