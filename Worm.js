@@ -2,13 +2,9 @@ import pg from "pg";
 import { School } from "./School.js";
 import { GradeLevel } from "./GradeLevel.js";
 import { Student } from "./Student.js";
+import { db } from "./Database.js"
 
 (async () => {
-  const db = new pg.Client({
-    connectionString: "postgres://postgres:postgres@localhost:5432/worm",
-  });
-  await db.connect();
-
   // Now you got a database connection to work with
 
   // const res = await db.query("SELECT NOW()");
@@ -19,9 +15,9 @@ import { Student } from "./Student.js";
 
   // 1) Create School
 
-  // const school = await School.create(db, {
-  //   school_name: "Turtle Academy",
-  // });
+  const school = await School.create({
+    school_name: "Turtle Academy",
+  });
 
   // console.log("Below is the instantiated instance.");
   // console.log(school);

@@ -1,4 +1,5 @@
 import { Base } from "./Base.js";
+import { db } from "./Database.js"
 
 export class School extends Base {
   constructor(row) {
@@ -10,7 +11,7 @@ export class School extends Base {
     this.deletedAt = row.deleted_at;
   }
 
-  static async create(db, school) {
+  static async create(school) {
     // TODO: Let's abstract the values from the incoming object so it is clean code.
     try {
       const text = "INSERT INTO schools(school_name) VALUES($1) RETURNING *";
@@ -29,7 +30,7 @@ export class School extends Base {
   }
 
   // TODO: abstract to base class
-  static async find(db, schoolId) {
+  static async find(schoolId) {
     try {
       const query = {
         name: "fetch-school",
@@ -49,7 +50,7 @@ export class School extends Base {
 
   // TODO: abstract to base?
   // Question: should this instantiate an instance of each school and return that? or is this ok?
-  static async fetchAll(db) {
+  static async fetchAll() {
     try {
       const res = await db.query("SELECT * FROM schools");
 
@@ -61,7 +62,7 @@ export class School extends Base {
 
   // TODO: abstract to base if possible
   // Different classes might need to change different values, could be a challenge.
-  async save(db) {
+  async save() {
     try {
       const text = `
         INSERT INTO schools (school_id, school_name, updated_at)
@@ -81,7 +82,7 @@ export class School extends Base {
     }
   }
 
-  async updateGradeLevels(db, gradeLevels) {
+  async updateGradeLevels(gradeLevels) {
     try {
       // look up promises water falling.
       // Really understand why you can't use map and for each.
@@ -96,7 +97,7 @@ export class School extends Base {
 
       // delete all the values for the school first.
 
-      this.#deleteRow(db);
+      this.#deleteRow();
 
       for (let i = 0; i < gradeLevels.length; i++) {
         const query = {
@@ -123,7 +124,7 @@ export class School extends Base {
   }
 
   // TODO: abstract to base class and DRY
-  async delete(db) {
+  async delete() {
     try {
       this.#deleteRow(db);
       this.#deleteStudentRow(db);
@@ -137,7 +138,7 @@ export class School extends Base {
     }
   }
 
-  async #deleteRow(db) {
+  async #deleteRow() {
     try {
       const query = "DELETE FROM school_grade_level_aff WHERE school_id = $1";
       const values = [this.schoolId];
@@ -152,7 +153,7 @@ export class School extends Base {
   }
 
   // Ask Zach if the intention is to delete all the students in the school?
-  async #deleteStudentRow(db) {
+  async #deleteStudentRow() {
     try {
       const query = "DELETE FROM students WHERE school_id = $1";
       const values = [this.schoolId];
@@ -166,7 +167,7 @@ export class School extends Base {
     }
   }
 
-  async softDelete(db) {
+  async softDelete() {
     try {
       const query = `
         UPDATE schools
@@ -186,7 +187,7 @@ export class School extends Base {
     }
   }
 
-  async restore(db) {
+  async restore() {
     try {
       const query = `
         UPDATE schools
