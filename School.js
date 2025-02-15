@@ -17,7 +17,7 @@ export class School extends Base {
     // TODO: Let's abstract the values from the incoming object so it is clean code.
 
     try {
-      db.connect();
+      db.connection();
       // console.log(getInstance());
       // console.log("inside");
       // console.log(db);
@@ -25,12 +25,12 @@ export class School extends Base {
       const query = {
         name: "create-school",
         text: "INSERT INTO schools(school_name) VALUES($1) RETURNING *",
-        values: [this.school_name],
+        values: [school.school_name],
       };
       // const text = "INSERT INTO schools(school_name) VALUES($1) RETURNING *";
       // const values = [school.school_name];
 
-      const res = await db.query(query);
+      const res = await db.queryDb(query);
 
       const row = res.rows[0];
 

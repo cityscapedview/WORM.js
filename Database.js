@@ -5,35 +5,26 @@ let db;
 class Database {
   constructor() {
     this.client = new pg.Client({
-      connectionString: "postgres:postgres:postgres@localhost:5432/worm",
+      connectionString: "postgres://postgres:postgres@localhost:5432/worm",
     });
   }
 
-  newInstance() {
-    console.log("new instance");
-    console.log(db);
-  }
-
-  oldInstance() {
-    console.log("old instance");
-    console.log(db);
-  }
-
-  async connect() {
+  async connection() {
     try {
       await this.client.connect();
       console.log("Connected to the database");
-    } catch {
+    } catch (err) {
       console.log("Connection error:", err);
     }
   }
 
-  async query(query) {
+  async queryDb(userQuery) {
     try {
-      const result = await this.client.query(query);
+      console.log(userQuery);
+      const result = await this.client.query(userQuery);
       return result;
-    } catch (error) {
-      console.error("Databse query error:", error);
+    } catch (err) {
+      console.error("Database query error:", err);
     }
   }
 
@@ -41,7 +32,7 @@ class Database {
     try {
       await this.client.end();
       console.log("Database connection closed");
-    } catch {
+    } catch (err) {
       console.log("Connection error:", err);
     }
   }
@@ -49,12 +40,10 @@ class Database {
 
 function getInstance() {
   if (db) {
-    db.oldInstance();
     return db;
   }
 
   db = new Database();
-  db.newInstance();
   return db;
 }
 
