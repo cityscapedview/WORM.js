@@ -2,7 +2,12 @@ import { Base } from "./Base.js";
 import { GradeLevel } from "./GradeLevel.js";
 import { School } from "./School.js";
 
+const cachedStudentIds = {};
+
 export class Student extends Base {
+  #school;
+  #gradeLevel;
+
   constructor(row) {
     super();
     this.studentId = row.student_id;
@@ -37,6 +42,9 @@ export class Student extends Base {
 
   // TODO: abstract to base class
   static async find(db, studentId) {
+    if (cachedStudentIds[studentId]) {
+      return cachedStudentIds[studentId];
+    }
     try {
       const query = {
         name: "fetch-student",
@@ -48,7 +56,9 @@ export class Student extends Base {
 
       const row = res.rows[0];
 
-      return new Student(row);
+      const student = new Student(row);
+      cachedStudentIds[studentId] = student;
+      return student;
     } catch (err) {
       console.error("Error finding student:", err);
     }
@@ -89,39 +99,23 @@ export class Student extends Base {
   }
 
   async getGradeLevel(db) {
-    try {
-      const query = {
-        name: "fetch-by-grade-level-id",
-        text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
-        values: [this.gradeLevelId],
-      };
-
-      const res = await db.query(query);
-
-      const row = res.rows[0];
-
-      return new GradeLevel(row);
-    } catch (err) {
-      console.error("Error finding grade level:", err);
+    if (this.#gradeLevel) {
+      return this.#gradeLevel;
     }
+
+    this.#gradeLevel = await GradeLevel.find(db, this.gradeLevelId);
+    return this.#gradeLevel;
   }
 
   async getSchool(db) {
-    try {
-      const query = {
-        name: "fetch-by-school-id",
-        text: "SELECT * FROM schools WHERE school_id = $1",
-        values: [this.schoolId],
-      };
+    return await School.find(db, this.schoolId);
 
-      const res = await db.query(query);
-
-      const row = res.rows[0];
-
-      return new School(row);
-    } catch (err) {
-      console.error("Error finding school:", err);
+    if (this.#school) {
+      return this.#school;
     }
+
+    this.#school = await School.find(db, this.schoolId);
+    return this.#school;
   }
 
   // TODO: abstract to base class and DRY

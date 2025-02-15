@@ -106,14 +106,14 @@ import { Student } from "./Student.js";
 
   // 7) getSchool and getGradeLevel methods
 
-  // const alice = await Student.find(db, 4);
+  const alice = await Student.find(db, 4);
 
   // console.log(alice);
 
-  // const schoolName = (await alice.getSchool(db)).schoolName;
+  const schoolName = (await alice.getSchool(db)).schoolName;
   // const gl = (await alice.getGradeLevel(db)).gradeLevelName;
 
-  // console.log(schoolName);
+  console.log(schoolName);
 
   // 8) delete function.
 
