@@ -2,6 +2,8 @@ import { Base } from "./Base.js";
 import { GradeLevel } from "./GradeLevel.js";
 import { School } from "./School.js";
 
+const cachedStudentIds = {};
+
 export class Student extends Base {
   #school;
   #gradeLevel;
@@ -40,6 +42,9 @@ export class Student extends Base {
 
   // TODO: abstract to base class
   static async find(db, studentId) {
+    if (cachedStudentIds[studentId]) {
+      return cachedStudentIds[studentId];
+    }
     try {
       const query = {
         name: "fetch-student",
@@ -51,7 +56,9 @@ export class Student extends Base {
 
       const row = res.rows[0];
 
-      return new Student(row);
+      const student = new Student(row);
+      cachedStudentIds[studentId] = student;
+      return student;
     } catch (err) {
       console.error("Error finding student:", err);
     }

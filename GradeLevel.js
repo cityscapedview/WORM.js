@@ -1,5 +1,7 @@
 import { Base } from "./Base.js";
 
+const cachedGradeLevelIds = {};
+
 export class GradeLevel extends Base {
   constructor(row) {
     super();
@@ -31,6 +33,9 @@ export class GradeLevel extends Base {
 
   // TODO: abstract to base class
   static async find(db, gradeLevelId) {
+    if (cachedGradeLevelIds[gradeLevelId]) {
+      return cachedGradeLevelIds[gradeLevelId];
+    }
     try {
       const query = {
         name: "fetch-grade-level",
@@ -41,8 +46,9 @@ export class GradeLevel extends Base {
       const res = await db.query(query);
 
       const row = res.rows[0];
-
-      return new GradeLevel(row);
+      const gradeLevel = new GradeLevel(row);
+      cachedGradeLevelIds[gradeLevelId] = gradeLevel;
+      return gradeLevel;
     } catch (err) {
       console.error("Error finding grade level:", err);
     }
@@ -100,10 +106,14 @@ export class GradeLevel extends Base {
 
   async #deleteGradeLevelAff(db) {
     try {
-      const query = "DELETE FROM school_grade_level_aff WHERE grade_level_id = $1";
+      const query =
+        "DELETE FROM school_grade_level_aff WHERE grade_level_id = $1";
       const values = [this.gradeLevelId];
       const res = await db.query(query, values);
-      console.log("Deleted grade level affiliate rows successfully:", res.rowCount);
+      console.log(
+        "Deleted grade level affiliate rows successfully:",
+        res.rowCount,
+      );
     } catch (err) {
       console.error("Error deleting rows:", err);
     }
