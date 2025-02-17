@@ -4,7 +4,10 @@ import { GradeLevel } from "./GradeLevel.js";
 import { Student } from "./Student.js";
 import { getInstance } from "./Database.js";
 
+let db = getInstance();
+
 (async () => {
+  await db.connection();
   // Now you got a database connection to work with
 
   // const res = await db.query("SELECT NOW()");
@@ -138,5 +141,5 @@ import { getInstance } from "./Database.js";
   // await school.restore(db);
   // console.log(`${school.schoolName} was restored. `);
 
-  // await db.end();
+  await db.close();
 })();

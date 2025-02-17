@@ -17,7 +17,6 @@ export class School extends Base {
     // TODO: Let's abstract the values from the incoming object so it is clean code.
 
     try {
-      db.connection();
       // console.log(getInstance());
       // console.log("inside");
       // console.log(db);
@@ -37,8 +36,6 @@ export class School extends Base {
       const schoolInstances = new School(row);
 
       return schoolInstances;
-      // won't run after return.
-      db.close();
     } catch (err) {
       console.error("Error creating school:", err);
     }
