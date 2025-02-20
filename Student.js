@@ -1,6 +1,9 @@
 import { Base } from "./Base.js";
 import { GradeLevel } from "./GradeLevel.js";
 import { School } from "./School.js";
+import { getInstance } from "./Database.js";
+
+let db = getInstance();
 
 const cachedStudentIds = {};
 
@@ -20,17 +23,15 @@ export class Student extends Base {
   }
 
   // TODO: Let's abstract the values from the incoming object so it is clean code.
-  static async create(db, student) {
+  static async create(student) {
     try {
-      const text =
-        "INSERT INTO students(student_name, school_id, grade_level_id) VALUES($1, $2, $3) RETURNING *";
-      const values = [
-        student.student_name,
-        student.school_id,
-        student.grade_level_id,
-      ];
+      const query = {
+        name: "create-student",
+        text: "INSERT INTO students(student_name, school_id, grade_level_id) VALUES($1, $2, $3) RETURNING *",
+        values: [student.student_name, student.school_id, student.grade_level_id],
+      };
 
-      const res = await db.query(text, values);
+      const res = await db.queryDb(query);
 
       const row = res.rows[0];
 
@@ -41,10 +42,12 @@ export class Student extends Base {
   }
 
   // TODO: abstract to base class
-  static async find(db, studentId) {
+
+  static async find(studentId) {
     if (cachedStudentIds[studentId]) {
       return cachedStudentIds[studentId];
     }
+
     try {
       const query = {
         name: "fetch-student",
@@ -52,7 +55,7 @@ export class Student extends Base {
         values: [studentId],
       };
 
-      const res = await db.query(query);
+      const res = await db.queryDb(query);
 
       const row = res.rows[0];
 
@@ -66,9 +69,13 @@ export class Student extends Base {
 
   // TODO: abstract to base?
   // Question: should this instantiate an instance of each student and return that? or is this ok?
-  static async fetchAll(db) {
+  static async fetchAll() {
     try {
-      const res = await db.query("SELECT * FROM students");
+      const query = {
+        name: "fetch-all-students",
+        text: "SELECT * FROM schools",
+      };
+      const res = await db.queryDb(query);
 
       return res.rows;
     } catch (err) {
@@ -78,20 +85,23 @@ export class Student extends Base {
 
   // TODO: abstract to base if possible
   // Different classes might need to change different values, could be a challenge.
-  async save(db) {
+  async save() {
     try {
-      const text = `
+      const query = {
+        name: "save-student",
+        text: `
         INSERT INTO students(student_id, student_name, updated_at)
         VALUES ($1, $2, NOW())
         ON CONFLICT (student_id)
         DO UPDATE SET
-          school_name = EXCLUDED.student_name,
+          student_name = EXCLUDED.student_name,
           updated_at = NOW()
         RETURNING *;
-      `;
+      `,
+        values: [this.studentId, this.studentName],
+      };
 
-      const values = [this.studentId, this.studentName];
-      const res = await db.query(text, values);
+      const res = await db.queryDb(query);
       console.log("Save Successful:", res.rows[0]);
     } catch (err) {
       console.error("Error during upsert:", err);
@@ -103,43 +113,49 @@ export class Student extends Base {
       return this.#gradeLevel;
     }
 
-    this.#gradeLevel = await GradeLevel.find(db, this.gradeLevelId);
+    this.#gradeLevel = await GradeLevel.find(this.gradeLevelId);
     return this.#gradeLevel;
   }
 
-  async getSchool(db) {
-    return await School.find(db, this.schoolId);
+  async getSchool() {
+    return await School.find(this.schoolId);
 
     if (this.#school) {
       return this.#school;
     }
 
-    this.#school = await School.find(db, this.schoolId);
+    this.#school = await School.find(this.schoolId);
     return this.#school;
   }
 
   // TODO: abstract to base class and DRY
-  async delete(db) {
+  async delete() {
     try {
-      const query = "DELETE FROM students WHERE student_id = $1";
-      const values = [this.studentId];
-      const res = await db.query(query, values);
+      const query = {
+        name: "delete-students",
+        text: "DELETE FROM students WHERE student_id = $1",
+        values: [this.studentId],
+      };
+      const res = await db.queryDb(query);
       console.log("Deleted student rows successfully:", res.rowCount);
     } catch (err) {
       console.error("Error deleting rows:", err);
     }
   }
 
-  async softDelete(db) {
+  async softDelete() {
     try {
-      const query = `
+      const query = {
+        name: "soft-delete-students",
+        text: `
         UPDATE students
         SET deleted_at = NOW()
         WHERE student_id = $1 AND deleted_at IS NULL
         RETURNING *;
-      `;
-      const values = [this.studentId];
-      const res = await db.query(query, values);
+      `,
+        values: [this.studentId],
+      };
+      const res = await db.queryDb(query);
       if (res.rowCount > 0) {
         console.log("User soft deleted:", res.rows[0]);
       } else {
@@ -150,16 +166,20 @@ export class Student extends Base {
     }
   }
 
-  async restore(db) {
+  async restore() {
     try {
-      const query = `
+      const query = {
+        name: "restore-soft-deleted-students",
+        text: `
         UPDATE students
         SET deleted_at = NULL
         WHERE student_id = $1 AND deleted_at IS NOT NULL
         RETURNING *;
-      `;
-      const values = [this.studentId];
-      const res = await db.query(query, values);
+      `,
+        values: [this.studentId],
+      };
+
+      const res = await db.queryDb(query);
       if (res.rowCount > 0) {
         console.log("User restored:", res.rows[0]);
       } else {

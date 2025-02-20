@@ -2,13 +2,12 @@ import pg from "pg";
 import { School } from "./School.js";
 import { GradeLevel } from "./GradeLevel.js";
 import { Student } from "./Student.js";
+import { getInstance } from "./Database.js";
+
+let db = getInstance();
 
 (async () => {
-  const db = new pg.Client({
-    connectionString: "postgres://postgres:postgres@localhost:5432/worm",
-  });
-  await db.connect();
-
+  await db.connection();
   // Now you got a database connection to work with
 
   // const res = await db.query("SELECT NOW()");
@@ -19,8 +18,8 @@ import { Student } from "./Student.js";
 
   // 1) Create School
 
-  // const school = await School.create(db, {
-  //   school_name: "Turtle Academy",
+  // const school = await School.create({
+  //   school_name: "Scout Academy",
   // });
 
   // console.log("Below is the instantiated instance.");
@@ -31,9 +30,9 @@ import { Student } from "./Student.js";
 
   // 1) Create GradeLevel
 
-  // const fourthGl = await GradeLevel.create(db, {
-  //   grade_level_code: "4",
-  //   grade_level_name: "4th Grade",
+  // const fourthGl = await GradeLevel.create({
+  //   grade_level_code: "6",
+  //   grade_level_name: "6th Grade",
   // });
 
   // console.log("Below is the instantiated instance.");
@@ -45,12 +44,14 @@ import { Student } from "./Student.js";
 
   // 2) Find method
 
-  // const school = await School.find(db, 2);
-  // console.log(school)
-  // const gradeLevel = await GradeLevel.find(db, 2);
-  // const student = await Student.find(db, 4);
+  // const school = await School.find(3);
+  // console.log(school);
 
-  // console.log(student);
+  // const gradeLevel = await GradeLevel.find(3);
+  // console.log(gradeLevel);
+
+  // const studentTest = await Student.find(14);
+  // console.log(studentTest);
 
   // 1) Create Student
 
@@ -59,8 +60,8 @@ import { Student } from "./Student.js";
   //   Instantiate a gradeLevel
   //
 
-  // const student = await Student.create(db, {
-  //   student_name: "Alice",
+  // const student = await Student.create({
+  //   student_name: "Magic Tookie",
   //   school_id: school.getId(),
   //   grade_level_id: gradeLevel.getId(),
   // });
@@ -69,78 +70,97 @@ import { Student } from "./Student.js";
 
   // 3) Find By Grade Code.
 
-  // const kinder = await GradeLevel.findByCode(db, "K");
+  // const kinder = await GradeLevel.findByCode("6");
 
   // console.log(kinder);
 
   // 4) Save Method
 
-  // const schoolChosen = await School.find(db, 1);
+  // const schoolChosen = await School.find(1);
+  // console.log("school chosen!");
   // console.log(schoolChosen);
 
-  // school.setData({ school_name: "AbaaaAaAak Uni" });
-  // console.log(school.dynamicProperty);
-  // await school.save(db);
+  // schoolChosen.setData({ school_name: "Tookerbacker Uni" });
+
+  // await schoolChosen.save();
+  // console.log(schoolChosen);
+
+  // const student = await Student.find(14);
+  // console.log(student);
+
+  // const school = await School.find(1);
   // console.log(school);
 
-  // const student = await Student.find(1);
-  // student.setData({ student_name: "Alice A" });
-  // student.setData({ grade_level_id: await GradeLevel.findByCode("1").getId() });
+  // const gradeLevel = (await GradeLevel.findByCode("6")).getId();
+  // console.log(gradeLevel);
+
+  // TODO: Resolve grade_level_id error
+  // student.setData({ student_name: "Sadie Lady" });
+  // student.setData({ grade_level_id: gradeLevel });
   // student.setData({ school_id: school.getId() });
   // await student.save();
+  // console.log(student);
 
   // 5) FetchAll Method
 
-  // const tallGrades = (await GradeLevel.fetchAll(db));
+  // const tallGrades = (await GradeLevel.fetchAll());
   // console.log(tallGrades)
-  // const allGrades = (await GradeLevel.fetchAll(db)).map((gl) => gl.grade_level_name);
+  // const allGrades = (await GradeLevel.fetchAll()).map((gl) => gl.grade_level_name);
   // console.log(`${allGrades.join(", ")}`);
 
   // 6) updateGradeLevels Method
 
-  // const kinder = await GradeLevel.findByCode(db, "K");
-  // const first = await GradeLevel.findByCode(db, "1");
-  // await school.updateGradeLevels(db, [kinder, first]);
-  // console.log(`school after: ${school}`);
+  // const school = await School.find(1);
+  // console.log(school);
+
+  // const kinder = await GradeLevel.findByCode("6");
+  // const first = await GradeLevel.findByCode("3");
+  // await school.updateGradeLevels([kinder, first]);
+  // console.log(`school after `);
+  // console.log(school);
+
+  // TODO print gradeLevel association
   //
 
   // 7) getSchool and getGradeLevel methods
 
-  const alice = await Student.find(db, 4);
+  // const alice = await Student.find(14);
 
   // console.log(alice);
 
-  const schoolName = (await alice.getSchool(db)).schoolName;
-  // const gl = (await alice.getGradeLevel(db)).gradeLevelName;
+  // const schoolName = (await alice.getSchool()).schoolName;
+  // console.log(schoolName);
 
-  console.log(schoolName);
+  // const gl = (await alice.getGradeLevel()).gradeLevelName;
+  // console.log(gl);
 
   // 8) delete function.
 
-  // const kinder = await GradeLevel.findByCode(db, "K");
-  // await kinder.delete(db);
+  // const kinder = await GradeLevel.findByCode("K");
+  // await kinder.delete();
 
-  // const stu = await Student.find(db, 3);
-  // const aSchool = await stu.getSchool(db);
-  // await stu.delete(db);
-  // await school.delete(db);
+  // const stu = await Student.find(3);
+  // const aSchool = await stu.getSchool();
+  // await stu.delete();
+  // await school.delete();
 
   // 9) We need a way to soft delete and restore schools
   // and students via the softDelete and restore methods.
 
-  // const stu = await Student.find(db, 4);
-  // await stu.softDelete(db);
-  // console.log(`${stu.student_name} was soft deleted on ${stu.deleted_at}`);
+  // const stu = await Student.find(14);
+  // await stu.softDelete();
+  // TODO: deletedAt won't print
+  // console.log(`${stu.studentName} was soft deleted on ${stu.deletedAt}`);
 
-  // await stu.restore(db);
-  // console.log(`${stu.student_name} was restored. `);
+  // await stu.restore();
+  // console.log(`${stu.studentName} was restored. `);
 
-  // const school = await School.find(db, 2);
-  // await school.softDelete(db);
-  // console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
+  const school = await School.find(3);
+  await school.softDelete();
+  console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
 
-  // await school.restore(db);
-  // console.log(`${school.schoolName} was restored. `);
+  await school.restore();
+  console.log(`${school.schoolName} was restored. `);
 
-  await db.end();
+  await db.close();
 })();
