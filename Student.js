@@ -82,7 +82,7 @@ export class Student extends Base {
         VALUES ($1, $2, NOW())
         ON CONFLICT (student_id)
         DO UPDATE SET
-          school_name = EXCLUDED.student_name,
+          student_name = EXCLUDED.student_name,
           updated_at = NOW()
         RETURNING *;
       `,
@@ -173,7 +173,7 @@ export class Student extends Base {
   async restore() {
     try {
       const query = {
-        name: "soft-delete-students",
+        name: "restore-soft-deleted-students",
         text: `
         UPDATE students
         SET deleted_at = NULL

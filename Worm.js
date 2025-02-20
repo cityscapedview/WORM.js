@@ -85,16 +85,21 @@ let db = getInstance();
   // await schoolChosen.save();
   // console.log(schoolChosen);
 
-  const student = await Student.find(14);
-  console.log(student);
+  // const student = await Student.find(14);
+  // console.log(student);
 
-  const school = await School.find(1);
+  // const school = await School.find(1);
+  // console.log(school);
 
-  student.setData({ student_name: "Sadie Lady" });
-  student.setData({ grade_level_id: (await GradeLevel.findByCode("6")).getId() });
-  student.setData({ school_id: school.getId() });
-  await student.save();
-  console.log(student);
+  // const gradeLevel = (await GradeLevel.findByCode("6")).getId();
+  // console.log(gradeLevel);
+
+  // TODO: Resolve grade_level_id error
+  // student.setData({ student_name: "Sadie Lady" });
+  // student.setData({ grade_level_id: gradeLevel });
+  // student.setData({ school_id: school.getId() });
+  // await student.save();
+  // console.log(student);
 
   // 5) FetchAll Method
 
@@ -105,22 +110,29 @@ let db = getInstance();
 
   // 6) updateGradeLevels Method
 
-  // const kinder = await GradeLevel.findByCode("K");
-  // const first = await GradeLevel.findByCode("1");
+  // const school = await School.find(1);
+  // console.log(school);
+
+  // const kinder = await GradeLevel.findByCode("6");
+  // const first = await GradeLevel.findByCode("3");
   // await school.updateGradeLevels([kinder, first]);
-  // console.log(`school after: ${school}`);
+  // console.log(`school after `);
+  // console.log(school);
+
+  // TODO print gradeLevel association
   //
 
   // 7) getSchool and getGradeLevel methods
 
-  // const alice = await Student.find(4);
+  // const alice = await Student.find(14);
 
   // console.log(alice);
 
   // const schoolName = (await alice.getSchool()).schoolName;
-  // const gl = (await alice.getGradeLevel()).gradeLevelName;
-
   // console.log(schoolName);
+
+  // const gl = (await alice.getGradeLevel()).gradeLevelName;
+  // console.log(gl);
 
   // 8) delete function.
 
@@ -135,19 +147,20 @@ let db = getInstance();
   // 9) We need a way to soft delete and restore schools
   // and students via the softDelete and restore methods.
 
-  // const stu = await Student.find(4);
+  // const stu = await Student.find(14);
   // await stu.softDelete();
-  // console.log(`${stu.student_name} was soft deleted on ${stu.deleted_at}`);
+  // TODO: deletedAt won't print
+  // console.log(`${stu.studentName} was soft deleted on ${stu.deletedAt}`);
 
   // await stu.restore();
-  // console.log(`${stu.student_name} was restored. `);
+  // console.log(`${stu.studentName} was restored. `);
 
-  // const school = await School.find(2);
-  // await school.softDelete();
-  // console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
+  const school = await School.find(3);
+  await school.softDelete();
+  console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
 
-  // await school.restore();
-  // console.log(`${school.schoolName} was restored. `);
+  await school.restore();
+  console.log(`${school.schoolName} was restored. `);
 
   await db.close();
 })();

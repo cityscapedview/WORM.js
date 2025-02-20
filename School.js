@@ -147,7 +147,7 @@ export class School extends Base {
         text: "DELETE FROM school_grade_level_aff WHERE school_id = $1",
         values: [this.schoolId],
       };
-      const res = await db.query(query);
+      const res = await db.queryDb(query);
       console.log(
         "Deleted grade level affiliation rows successfully:",
         res.rowCount,
@@ -187,7 +187,7 @@ export class School extends Base {
           `,
         values: [this.schoolId],
       };
-      const res = await db.queryDb(query, values);
+      const res = await db.queryDb(query);
       if (res.rowCount > 0) {
         console.log("School soft deleted:", res.rows[0]);
       } else {
