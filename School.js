@@ -98,19 +98,6 @@ export class School extends Base {
 
   async updateGradeLevels(gradeLevels) {
     try {
-      // look up promises water falling.
-      // Really understand why you can't use map and for each.
-
-      // Look up 'bluebird' promise waterfalling.
-      //
-      // Use a for loop to iterate through, but understand why.  Also you can recursion.
-      //
-      // be careful on insert on conflict because you can run into instances like: (check discord)
-
-      // delete the existing rows first.
-
-      // delete all the values for the school first.
-
       this.#deleteRow();
 
       for (let i = 0; i < gradeLevels.length; i++) {
