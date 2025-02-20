@@ -3,6 +3,8 @@ import { getInstance } from "./Database.js";
 
 let db = getInstance();
 
+const cachedSchoolIds = {};
+
 export class School extends Base {
   constructor(row) {
     super();
@@ -35,7 +37,11 @@ export class School extends Base {
   }
 
   // TODO: abstract to base class
-  static async find(schoolId) {
+  static async find(db) {
+    if (cachedSchoolIds[schoolId]) {
+      return cachedSchoolIds[schoolId];
+    }
+
     try {
       const query = {
         name: "fetch-school",
@@ -46,8 +52,9 @@ export class School extends Base {
       const res = await db.queryDb(query);
 
       const row = res.rows[0];
-
-      return new School(row);
+      const school = new School(row);
+      cachedSchoolIds[schoolId] = school;
+      return school;
     } catch (err) {
       console.error("Error finding school:", err);
     }
