@@ -17,21 +17,16 @@ export class School extends Base {
     // TODO: Let's abstract the values from the incoming object so it is clean code.
 
     try {
-      // console.log(getInstance());
-      // console.log("inside");
-      // console.log(db);
-
       const query = {
         name: "create-school",
         text: "INSERT INTO schools(school_name) VALUES($1) RETURNING *",
         values: [school.school_name],
       };
-      // const text = "INSERT INTO schools(school_name) VALUES($1) RETURNING *";
-      // const values = [school.school_name];
-
       const res = await db.queryDb(query);
 
       const row = res.rows[0];
+      console.log("row:");
+      console.log(row);
 
       const schoolInstances = new School(row);
 
@@ -50,7 +45,7 @@ export class School extends Base {
         values: [schoolId],
       };
 
-      const res = await db.query(query);
+      const res = await db.queryDb(query);
 
       const row = res.rows[0];
 
@@ -64,7 +59,11 @@ export class School extends Base {
   // Question: should this instantiate an instance of each school and return that? or is this ok?
   static async fetchAll() {
     try {
-      const res = await db.query("SELECT * FROM schools");
+      const query = {
+        name: "fetch-all-school",
+        text: "SELECT * FROM schools",
+      };
+      const res = await db.queryDb(query);
 
       return res.rows;
     } catch (err) {
@@ -76,7 +75,9 @@ export class School extends Base {
   // Different classes might need to change different values, could be a challenge.
   async save() {
     try {
-      const text = `
+      const query = {
+        name: "save-school",
+        text: `
         INSERT INTO schools (school_id, school_name, updated_at)
         VALUES ($1, $2, NOW())
         ON CONFLICT (school_id)
@@ -84,10 +85,11 @@ export class School extends Base {
           school_name = EXCLUDED.school_name,
           updated_at = NOW()
         RETURNING *;
-      `;
+      `,
+        values: [this.schoolId, this.schoolName],
+      };
 
-      const values = [this.schoolId, this.schoolName];
-      const res = await db.query(text, values);
+      const res = await db.queryDb(query);
       console.log("Save Successful:", res.rows[0]);
     } catch (err) {
       console.error("Error during upsert:", err);
@@ -117,14 +119,14 @@ export class School extends Base {
           text: `INSERT INTO school_grade_level_aff (school_id, grade_level_id) VALUES ($1, $2)`,
           values: [this.schoolId, gradeLevels[i].gradeLevelId],
         };
-        const res = await db.query(query);
+        const res = await db.queryDb(query);
         console.log(
           "Updated grade level affiliation successfully:",
           res.rowCount,
         );
       }
 
-      await this.save(db);
+      await this.save();
     } catch (err) {
       console.error("Error updating grade levels:", err);
     }
@@ -138,12 +140,15 @@ export class School extends Base {
   // TODO: abstract to base class and DRY
   async delete() {
     try {
-      this.#deleteRow(db);
-      this.#deleteStudentRow(db);
+      this.#deleteRow();
+      this.#deleteStudentRow();
 
-      const query = "DELETE FROM schools WHERE school_id = $1";
-      const values = [this.schoolId];
-      const res = await db.query(query, values);
+      const query = {
+        name: "delete-school",
+        text: "DELETE FROM schools WHERE school_id = $1",
+        values: [this.schoolId],
+      };
+      const res = await db.queryDb(query);
       console.log("Deleted school rows successfully:", res.rowCount);
     } catch (err) {
       console.error("Error deleting rows:", err);
@@ -152,9 +157,12 @@ export class School extends Base {
 
   async #deleteRow() {
     try {
-      const query = "DELETE FROM school_grade_level_aff WHERE school_id = $1";
-      const values = [this.schoolId];
-      const res = await db.query(query, values);
+      const query = {
+        name: "delete-school-row",
+        text: "DELETE FROM school_grade_level_aff WHERE school_id = $1",
+        values: [this.schoolId],
+      };
+      const res = await db.query(query);
       console.log(
         "Deleted grade level affiliation rows successfully:",
         res.rowCount,
@@ -167,9 +175,12 @@ export class School extends Base {
   // Ask Zach if the intention is to delete all the students in the school?
   async #deleteStudentRow() {
     try {
-      const query = "DELETE FROM students WHERE school_id = $1";
-      const values = [this.schoolId];
-      const res = await db.query(query, values);
+      const query = {
+        name: "delete-student-row",
+        text: "DELETE FROM students WHERE school_id = $1",
+        values: [this.schoolId],
+      };
+      const res = await db.queryDb(query);
       console.log(
         "Deleted student row affiliated with school successfully:",
         res.rowCount,
@@ -181,14 +192,17 @@ export class School extends Base {
 
   async softDelete() {
     try {
-      const query = `
-        UPDATE schools
-        SET deleted_at = NOW()
-        WHERE school_id = $1 AND deleted_at IS NULL
-        RETURNING *;
-      `;
-      const values = [this.schoolId];
-      const res = await db.query(query, values);
+      const query = {
+        name: "soft-delete-school",
+        text: `
+            UPDATE schools
+            SET deleted_at = NOW()
+            WHERE school_id = $1 AND deleted_at IS NULL
+            RETURNING *;
+          `,
+        values: [this.schoolId],
+      };
+      const res = await db.queryDb(query, values);
       if (res.rowCount > 0) {
         console.log("School soft deleted:", res.rows[0]);
       } else {
@@ -201,14 +215,17 @@ export class School extends Base {
 
   async restore() {
     try {
-      const query = `
-        UPDATE schools
-        SET deleted_at = NULL
-        WHERE school_id = $1 AND deleted_at IS NOT NULL
-        RETURNING *;
-      `;
-      const values = [this.schoolId];
-      const res = await db.query(query, values);
+      const query = {
+        name: "restore-soft-deleted-school",
+        text: `
+            UPDATE schools
+            SET deleted_at = NULL
+            WHERE school_id = $1 AND deleted_at IS NOT NULL
+            RETURNING *;
+          `,
+        values: [this.schoolId],
+      };
+      const res = await db.queryDb(query);
       if (res.rowCount > 0) {
         console.log("School restored:", res.rows[0]);
       } else {

@@ -20,7 +20,6 @@ class Database {
 
   async queryDb(userQuery) {
     try {
-      console.log(userQuery);
       const result = await this.client.query(userQuery);
       return result;
     } catch (err) {

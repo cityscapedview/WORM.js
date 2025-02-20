@@ -19,14 +19,14 @@ let db = getInstance();
   // 1) Create School
 
   const school = await School.create({
-    school_name: "Turtle Academy",
+    school_name: "Scout Academy",
   });
 
   // console.log("Below is the instantiated instance.");
   // console.log(school);
 
-  // console.log("Below is the public property.");
-  // console.log(school.schoolName);
+  console.log("Below is the public property.");
+  console.log(school.schoolName);
 
   // 1) Create GradeLevel
 
@@ -45,7 +45,7 @@ let db = getInstance();
   // 2) Find method
 
   // const school = await School.find(db, 2);
-  // console.log(school)
+  // console.log(school);
   // const gradeLevel = await GradeLevel.find(db, 2);
   // const student = await Student.find(db, 4);
 
@@ -74,11 +74,12 @@ let db = getInstance();
 
   // 4) Save Method
 
-  // const schoolChosen = await School.find(db, 1);
-  // console.log(schoolChosen);
+  const schoolChosen = await School.find(1);
+  console.log("school chosen!");
+  console.log(schoolChosen);
 
-  // school.setData({ school_name: "AbaaaAaAak Uni" });
-  // console.log(school.dynamicProperty);
+  school.setData({ school_name: "AbaaaAaAak Uni" });
+  console.log(school.dynamicProperty);
   // await school.save(db);
   // console.log(school);
 
@@ -99,8 +100,8 @@ let db = getInstance();
 
   // const kinder = await GradeLevel.findByCode(db, "K");
   // const first = await GradeLevel.findByCode(db, "1");
-  // await school.updateGradeLevels(db, [kinder, first]);
-  // console.log(`school after: ${school}`);
+  await school.updateGradeLevels(db, [kinder, first]);
+  console.log(`school after: ${school}`);
   //
 
   // 7) getSchool and getGradeLevel methods
@@ -109,10 +110,10 @@ let db = getInstance();
 
   // console.log(alice);
 
-  // const schoolName = (await alice.getSchool(db)).schoolName;
-  // const gl = (await alice.getGradeLevel(db)).gradeLevelName;
+  const schoolName = (await alice.getSchool(db)).schoolName;
+  const gl = (await alice.getGradeLevel(db)).gradeLevelName;
 
-  // console.log(schoolName);
+  console.log(schoolName);
 
   // 8) delete function.
 
