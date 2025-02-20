@@ -30,7 +30,7 @@ let db = getInstance();
 
   // 1) Create GradeLevel
 
-  // const fourthGl = await GradeLevel.create(db, {
+  // const fourthGl = await GradeLevel.create({
   //   grade_level_code: "4",
   //   grade_level_name: "4th Grade",
   // });
@@ -44,10 +44,10 @@ let db = getInstance();
 
   // 2) Find method
 
-  // const school = await School.find(db, 2);
+  // const school = await School.find(2);
   // console.log(school);
-  // const gradeLevel = await GradeLevel.find(db, 2);
-  // const student = await Student.find(db, 4);
+  // const gradeLevel = await GradeLevel.find(2);
+  // const student = await Student.find(4);
 
   // console.log(student);
 
@@ -58,7 +58,7 @@ let db = getInstance();
   //   Instantiate a gradeLevel
   //
 
-  // const student = await Student.create(db, {
+  // const student = await Student.create({
   //   student_name: "Alice",
   //   school_id: school.getId(),
   //   grade_level_id: gradeLevel.getId(),
@@ -68,7 +68,7 @@ let db = getInstance();
 
   // 3) Find By Grade Code.
 
-  // const kinder = await GradeLevel.findByCode(db, "K");
+  // const kinder = await GradeLevel.findByCode("K");
 
   // console.log(kinder);
 
@@ -80,7 +80,7 @@ let db = getInstance();
 
   school.setData({ school_name: "AbaaaAaAak Uni" });
   console.log(school.dynamicProperty);
-  // await school.save(db);
+  // await school.save();
   // console.log(school);
 
   // const student = await Student.find(1);
@@ -91,55 +91,55 @@ let db = getInstance();
 
   // 5) FetchAll Method
 
-  // const tallGrades = (await GradeLevel.fetchAll(db));
+  // const tallGrades = (await GradeLevel.fetchAll());
   // console.log(tallGrades)
-  // const allGrades = (await GradeLevel.fetchAll(db)).map((gl) => gl.grade_level_name);
+  // const allGrades = (await GradeLevel.fetchAll()).map((gl) => gl.grade_level_name);
   // console.log(`${allGrades.join(", ")}`);
 
   // 6) updateGradeLevels Method
 
-  // const kinder = await GradeLevel.findByCode(db, "K");
-  // const first = await GradeLevel.findByCode(db, "1");
-  await school.updateGradeLevels(db, [kinder, first]);
-  console.log(`school after: ${school}`);
+  // const kinder = await GradeLevel.findByCode("K");
+  // const first = await GradeLevel.findByCode("1");
+  // await school.updateGradeLevels([kinder, first]);
+  // console.log(`school after: ${school}`);
   //
 
   // 7) getSchool and getGradeLevel methods
 
-  // const alice = await Student.find(db, 4);
+  // const alice = await Student.find(4);
 
   // console.log(alice);
 
-  const schoolName = (await alice.getSchool(db)).schoolName;
-  const gl = (await alice.getGradeLevel(db)).gradeLevelName;
+  const schoolName = (await alice.getSchool()).schoolName;
+  const gl = (await alice.getGradeLevel()).gradeLevelName;
 
   console.log(schoolName);
 
   // 8) delete function.
 
-  // const kinder = await GradeLevel.findByCode(db, "K");
-  // await kinder.delete(db);
+  // const kinder = await GradeLevel.findByCode("K");
+  // await kinder.delete();
 
-  // const stu = await Student.find(db, 3);
-  // const aSchool = await stu.getSchool(db);
-  // await stu.delete(db);
-  // await school.delete(db);
+  // const stu = await Student.find(3);
+  // const aSchool = await stu.getSchool();
+  // await stu.delete();
+  // await school.delete();
 
   // 9) We need a way to soft delete and restore schools
   // and students via the softDelete and restore methods.
 
-  // const stu = await Student.find(db, 4);
-  // await stu.softDelete(db);
+  // const stu = await Student.find(4);
+  // await stu.softDelete();
   // console.log(`${stu.student_name} was soft deleted on ${stu.deleted_at}`);
 
-  // await stu.restore(db);
+  // await stu.restore();
   // console.log(`${stu.student_name} was restored. `);
 
-  // const school = await School.find(db, 2);
-  // await school.softDelete(db);
+  // const school = await School.find(2);
+  // await school.softDelete();
   // console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
 
-  // await school.restore(db);
+  // await school.restore();
   // console.log(`${school.schoolName} was restored. `);
 
   await db.close();

@@ -60,7 +60,7 @@ export class School extends Base {
   static async fetchAll() {
     try {
       const query = {
-        name: "fetch-all-school",
+        name: "fetch-all-schools",
         text: "SELECT * FROM schools",
       };
       const res = await db.queryDb(query);
