@@ -1,4 +1,7 @@
 import { Base } from "./Base.js";
+import { getInstance } from "./Database.js";
+
+let db = getInstance();
 
 export class GradeLevel extends Base {
   constructor(row) {
@@ -19,7 +22,7 @@ export class GradeLevel extends Base {
         values: [grade.grade_level_code, grade.grade_level_name],
       };
 
-      const res = await db.query(query);
+      const res = await db.queryDb(query);
 
       const row = res.rows[0];
 

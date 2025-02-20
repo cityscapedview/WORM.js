@@ -18,21 +18,21 @@ let db = getInstance();
 
   // 1) Create School
 
-  const school = await School.create({
-    school_name: "Scout Academy",
-  });
+  // const school = await School.create({
+  //   school_name: "Scout Academy",
+  // });
 
   // console.log("Below is the instantiated instance.");
   // console.log(school);
 
-  console.log("Below is the public property.");
-  console.log(school.schoolName);
+  // console.log("Below is the public property.");
+  // console.log(school.schoolName);
 
   // 1) Create GradeLevel
 
   // const fourthGl = await GradeLevel.create({
-  //   grade_level_code: "4",
-  //   grade_level_name: "4th Grade",
+  //   grade_level_code: "6",
+  //   grade_level_name: "6th Grade",
   // });
 
   // console.log("Below is the instantiated instance.");
@@ -44,12 +44,14 @@ let db = getInstance();
 
   // 2) Find method
 
-  // const school = await School.find(2);
+  // const school = await School.find(3);
   // console.log(school);
-  // const gradeLevel = await GradeLevel.find(2);
-  // const student = await Student.find(4);
 
-  // console.log(student);
+  // const gradeLevel = await GradeLevel.find(3);
+  // console.log(gradeLevel);
+
+  // const studentTest = await Student.find(14);
+  // console.log(studentTest);
 
   // 1) Create Student
 
@@ -59,7 +61,7 @@ let db = getInstance();
   //
 
   // const student = await Student.create({
-  //   student_name: "Alice",
+  //   student_name: "Magic Tookie",
   //   school_id: school.getId(),
   //   grade_level_id: gradeLevel.getId(),
   // });
@@ -68,26 +70,31 @@ let db = getInstance();
 
   // 3) Find By Grade Code.
 
-  // const kinder = await GradeLevel.findByCode("K");
+  // const kinder = await GradeLevel.findByCode("6");
 
   // console.log(kinder);
 
   // 4) Save Method
 
-  const schoolChosen = await School.find(1);
-  console.log("school chosen!");
-  console.log(schoolChosen);
+  // const schoolChosen = await School.find(1);
+  // console.log("school chosen!");
+  // console.log(schoolChosen);
 
-  school.setData({ school_name: "AbaaaAaAak Uni" });
-  console.log(school.dynamicProperty);
-  // await school.save();
-  // console.log(school);
+  // schoolChosen.setData({ school_name: "Tookerbacker Uni" });
 
-  // const student = await Student.find(1);
-  // student.setData({ student_name: "Alice A" });
-  // student.setData({ grade_level_id: await GradeLevel.findByCode("1").getId() });
-  // student.setData({ school_id: school.getId() });
-  // await student.save();
+  // await schoolChosen.save();
+  // console.log(schoolChosen);
+
+  const student = await Student.find(14);
+  console.log(student);
+
+  const school = await School.find(1);
+
+  student.setData({ student_name: "Sadie Lady" });
+  student.setData({ grade_level_id: (await GradeLevel.findByCode("6")).getId() });
+  student.setData({ school_id: school.getId() });
+  await student.save();
+  console.log(student);
 
   // 5) FetchAll Method
 
@@ -110,10 +117,10 @@ let db = getInstance();
 
   // console.log(alice);
 
-  const schoolName = (await alice.getSchool()).schoolName;
-  const gl = (await alice.getGradeLevel()).gradeLevelName;
+  // const schoolName = (await alice.getSchool()).schoolName;
+  // const gl = (await alice.getGradeLevel()).gradeLevelName;
 
-  console.log(schoolName);
+  // console.log(schoolName);
 
   // 8) delete function.
 

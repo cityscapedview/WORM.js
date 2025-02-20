@@ -1,6 +1,7 @@
 import { Base } from "./Base.js";
 import { GradeLevel } from "./GradeLevel.js";
 import { School } from "./School.js";
+import { getInstance } from "./Database.js";
 
 let db = getInstance();
 

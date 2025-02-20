@@ -25,8 +25,6 @@ export class School extends Base {
       const res = await db.queryDb(query);
 
       const row = res.rows[0];
-      console.log("row:");
-      console.log(row);
 
       const schoolInstances = new School(row);
 
