@@ -11,13 +11,15 @@ export class GradeLevel extends Base {
   }
 
   // TODO: Let's abstract the values from the incoming object so it is clean code.
-  static async create(db, grade) {
+  static async create(grade) {
     try {
-      const text =
-        "INSERT INTO grade_levels(grade_level_code, grade_level_name) VALUES($1, $2) RETURNING *";
-      const values = [grade.grade_level_code, grade.grade_level_name];
+      const query = {
+        name: "create-grade",
+        text: "INSERT INTO grade_levels(grade_level_code, grade_level_name) VALUES($1, $2) RETURNING *",
+        values: [grade.grade_level_code, grade.grade_level_name],
+      };
 
-      const res = await db.query(text, values);
+      const res = await db.query(query);
 
       const row = res.rows[0];
 
@@ -30,7 +32,7 @@ export class GradeLevel extends Base {
   }
 
   // TODO: abstract to base class
-  static async find(db, gradeLevelId) {
+  static async find(gradeLevelId) {
     try {
       const query = {
         name: "fetch-grade-level",
@@ -38,7 +40,7 @@ export class GradeLevel extends Base {
         values: [gradeLevelId],
       };
 
-      const res = await db.query(query);
+      const res = await db.queryDb(query);
 
       const row = res.rows[0];
 
@@ -49,7 +51,7 @@ export class GradeLevel extends Base {
   }
 
   // TODO: DRY this code with find
-  static async findByCode(db, gradeLevelCode) {
+  static async findByCode(gradeLevelCode) {
     try {
       const query = {
         name: "fetch-by-grade-code",
@@ -57,7 +59,7 @@ export class GradeLevel extends Base {
         values: [gradeLevelCode],
       };
 
-      const res = await db.query(query);
+      const res = await db.queryDb(query);
 
       const row = res.rows[0];
 
@@ -69,9 +71,13 @@ export class GradeLevel extends Base {
 
   // TODO: abstract to base?
   // Question: should this instantiate an instance of each grade level and return that? or is this ok?
-  static async fetchAll(db) {
+  static async fetchAll() {
     try {
-      const res = await db.query("SELECT * FROM grade_levels");
+      const query = {
+        name: "fetch-all-gradelevels",
+        text: "SELECT * FROM grade_levels",
+      };
+      const res = await db.queryDb(query);
 
       return res.rows;
     } catch (err) {
@@ -80,13 +86,17 @@ export class GradeLevel extends Base {
   }
 
   // TODO: abstract to base class and DRY
-  async delete(db) {
+  async delete() {
     try {
-      this.#deleteGradeLevelAff(db);
+      this.#deleteGradeLevelAff();
 
-      const query = "DELETE FROM grade_levels WHERE grade_level_id = $1";
-      const values = [this.gradeLevelId];
-      const res = await db.query(query, values);
+      const query = {
+        name: "fetch-by-grade-code",
+        text: "DELETE FROM grade_levels WHERE grade_level_id = $1",
+        values: [this.gradeLevelId],
+      };
+
+      const res = await db.queryDb(query);
       console.log("Deleted grade level rows successfully:", res.rowCount);
     } catch (err) {
       console.error("Error deleting rows:", err);
@@ -98,23 +108,17 @@ export class GradeLevel extends Base {
     return this.gradeLevelId;
   }
 
-  async #deleteGradeLevelAff(db) {
+  async #deleteGradeLevelAff() {
     try {
-      const query = "DELETE FROM school_grade_level_aff WHERE grade_level_id = $1";
-      const values = [this.gradeLevelId];
-      const res = await db.query(query, values);
+      const query = {
+        name: "fetch-by-grade-code",
+        text: "DELETE FROM school_grade_level_aff WHERE grade_level_id = $1",
+        values: [this.gradeLevelId],
+      };
+      const res = await db.queryDb(query);
       console.log("Deleted grade level affiliate rows successfully:", res.rowCount);
     } catch (err) {
       console.error("Error deleting rows:", err);
     }
   }
-
-  // TODO: implement contstructor
-  // TODO: implement get methods
-  // TODO: make variables public (based on zach's prompt)
-  // TODO: Read about classes in node and JS in MDN
-  // TODO: How do classes differ in php and js, how does async await help classes?
-  // TODO: Node has concurrency, if you try to do 4 inserts at the same time and didn't do async await, what would happen?
-  // TODO: Note that postgres can only handle one query at a time.  Understand concurrent languages like node and postgres that can only have one connection at a time.
-  // TODO: Connections vs pools.
 }
