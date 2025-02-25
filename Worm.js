@@ -31,8 +31,8 @@ let db = getInstance();
   // 1) Create GradeLevel
 
   const eighthGl = await GradeLevel.create({
-    grade_level_code: "25",
-    grade_level_name: "25th Grade",
+    grade_level_code: "32",
+    grade_level_name: "32th Grade",
   });
 
   console.log("Below is the instantiated instance.");

@@ -6,13 +6,18 @@ let db = getInstance();
 const cachedGradeLevelIds = {};
 
 export class GradeLevel extends Base {
-  constructor(row) {
-    super();
+
+  constructor(data) {
+    super(data);
+    this.gradeLevelId = this.getData("grade_level_id");
+    this.gradeLevelCode = this.getData("grade_level_code");
+    this.gradeLevelName = this.getData("grade_level_name");
+    this.createdAt = this.getData("created_at");
+    this.updatedAt = this.getData("updated_at");
   }
 
   // TODO: Let's abstract the values from the incoming object so it is clean code.
   static async create(grade) {
-    console.log(grade);
     try {
       const query = {
         name: "create-grade",
@@ -24,6 +29,7 @@ export class GradeLevel extends Base {
 
       const row = res.rows[0];
 
+      console.log("below is the row:")
       console.log(row);
 
       const gradeLevel = new GradeLevel(row);
