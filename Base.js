@@ -4,23 +4,24 @@ export class Base {
   #gradeLevelName;
   #createdAt;
   #updatedAt;
+  #data;
 
-  constructor(row) {
-    this.#gradeLevelId = row.grade_level_id;
-    this.#gradeLevelCode = row.grade_level_code;
-    this.#gradeLevelName = row.grade_level_name;
-    this.#createdAt = row.created_at;
-    this.#updatedAt = row.updated_at;
+  constructor(data) {
+    this.#gradeLevelId = data.grade_level_id;
+    this.#gradeLevelCode = data.grade_level_code;
+    this.#gradeLevelName = data.grade_level_name;
+    this.#createdAt = data.created_at;
+    this.#updatedAt = data.updated_at;
+    this.#data = data;
   }
 
   getData(fieldName = null) {
-      if (this.#data[fieldName]) {
-          return this.#data[fieldName];
-      }
+    if (this.#data[fieldName]) {
+      return this.#data[fieldName];
+    }
 
-      reuturn this.#data;
+    return this.#data;
   }
-
 
   setData(updatedData) {
     const data = updatedData;
@@ -35,3 +36,26 @@ export class Base {
     return str.replace(/_([a-z])/g, (match) => match[1].toUpperCase());
   }
 }
+
+// class Base {
+//     #data;
+//     constructor(data) {
+//         this.#data = data;
+//     }
+
+//     getData(fieldName = null) {
+//         if (this.#data[fieldName]) {
+//             return this.#data[fieldName];
+//         }
+
+//         reuturn this.#data;
+//     }
+// }
+
+// class School extends Base {
+
+// }
+
+// const s = new School({ schoolId: "1234", wobbles: true });
+// s.getData("schoolId") -> 1234
+// s.getData("wobbles") -> true

@@ -30,17 +30,17 @@ let db = getInstance();
 
   // 1) Create GradeLevel
 
-  // const fourthGl = await GradeLevel.create({
-  //   grade_level_code: "6",
-  //   grade_level_name: "6th Grade",
-  // });
+  const eighthGl = await GradeLevel.create({
+    grade_level_code: "25",
+    grade_level_name: "25th Grade",
+  });
 
-  // console.log("Below is the instantiated instance.");
-  // console.log(fourthGl);
+  console.log("Below is the instantiated instance.");
+  console.log(eighthGl);
 
-  // console.log("Below is the public property.");
-  // console.log(fourthGl.gradeLevelCode);
-  // console.log(fourthGl.gradeLevelName);
+  console.log("Below is the public property.");
+  console.log(eighthGl.gradeLevelCode);
+  console.log(eighthGl.gradeLevelName);
 
   // 2) Find method
 
@@ -155,12 +155,12 @@ let db = getInstance();
   // await stu.restore();
   // console.log(`${stu.studentName} was restored. `);
 
-  const school = await School.find(3);
-  await school.softDelete();
-  console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
+  // const school = await School.find(3);
+  // await school.softDelete();
+  // console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
 
-  await school.restore();
-  console.log(`${school.schoolName} was restored. `);
+  // await school.restore();
+  // console.log(`${school.schoolName} was restored. `);
 
   await db.close();
 })();

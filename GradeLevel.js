@@ -8,15 +8,11 @@ const cachedGradeLevelIds = {};
 export class GradeLevel extends Base {
   constructor(row) {
     super();
-    this.gradeLevelId = row.grade_level_id;
-    this.gradeLevelCode = row.grade_level_code;
-    this.gradeLevelName = row.grade_level_name;
-    this.createdAt = row.created_at;
-    this.updatedAt = row.updated_at;
   }
 
   // TODO: Let's abstract the values from the incoming object so it is clean code.
   static async create(grade) {
+    console.log(grade);
     try {
       const query = {
         name: "create-grade",
@@ -27,6 +23,8 @@ export class GradeLevel extends Base {
       const res = await db.queryDb(query);
 
       const row = res.rows[0];
+
+      console.log(row);
 
       const gradeLevel = new GradeLevel(row);
 
@@ -126,8 +124,10 @@ export class GradeLevel extends Base {
         values: [this.gradeLevelId],
       };
       const res = await db.queryDb(query);
-      console.log("Deleted grade level affiliate rows successfully:", res.rowCount);
-
+      console.log(
+        "Deleted grade level affiliate rows successfully:",
+        res.rowCount,
+      );
     } catch (err) {
       console.error("Error deleting rows:", err);
     }
