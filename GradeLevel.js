@@ -1,43 +1,30 @@
 import { Base } from "./Base.js";
-import { getInstance } from "./Database.js";
+import { getinstance } from "./database.js";
 
-let db = getInstance();
+let db = getinstance();
 
 const cachedGradeLevelIds = {};
 
 export class GradeLevel extends Base {
+  static schema = {
+    tableName: "grade_levels",
+    primaryKey: "grade_level_id",
+    columns: {
+      grade_level_id: { usePostgresDefault: true },
+      grade_level_code: {},
+      grade_level_name: {},
+      updated_at: { usePostgresDefault: true },
+      created_at: { usePostgresDefault: true },
+    },
+  };
 
-  constructor(data) {
-    super(data);
-    this.gradeLevelId = this.getData("grade_level_id");
-    this.gradeLevelCode = this.getData("grade_level_code");
-    this.gradeLevelName = this.getData("grade_level_name");
-    this.createdAt = this.getData("created_at");
-    this.updatedAt = this.getData("updated_at");
-  }
-
-  // TODO: Let's abstract the values from the incoming object so it is clean code.
-  static async create(grade) {
-    try {
-      const query = {
-        name: "create-grade",
-        text: "INSERT INTO grade_levels(grade_level_code, grade_level_name) VALUES($1, $2) RETURNING *",
-        values: [grade.grade_level_code, grade.grade_level_name],
-      };
-
-      const res = await db.queryDb(query);
-
-      const row = res.rows[0];
-
-      console.log("below is the row:")
-      console.log(row);
-
-      const gradeLevel = new GradeLevel(row);
-
-      return gradeLevel;
-    } catch (err) {
-      console.error("Error finding grade level:", err);
-    }
+  constructor(row) {
+    super(row);
+    this.schema.columns.grade_level_id = row.grade_level_id;
+    this.schema.columns.grade_level_code = row.grade_level_code;
+    this.schema.columns.grade_level_name = row.grade_level_name;
+    this.schema.columns.updated_at = row.updated_at;
+    this.schema.columns.created_at = row.created_at;
   }
 
   // TODO: abstract to base class

@@ -1,18 +1,38 @@
+import { getinstance } from "./database.js";
+
+let db = getinstance();
+
 export class Base {
-  // #gradeLevelId;
-  // #gradeLevelCode;
-  // #gradeLevelName;
-  // #createdAt;
-  // #updatedAt;
   #data;
 
   constructor(data) {
-    // this.#gradeLevelId = data.grade_level_id;
-    // this.#gradeLevelCode = data.grade_level_code;
-    // this.#gradeLevelName = data.grade_level_name;
-    // this.#createdAt = data.created_at;
-    // this.#updatedAt = data.updated_at;
     this.#data = data;
+  }
+
+  static async create(grade) {
+    try {
+      // TODO: Abstract into a function for query.
+      if (this.schema.tableName == "grade_levels") {
+        const query = {
+          name: "create-grade",
+          text: "INSERT INTO this.schema.tableName(grade_level_code, grade_level_name) VALUES($1, $2) RETURNING *",
+          values: [grade.grade_level_code, grade.grade_level_name],
+        };
+      }
+
+      const res = await db.queryDb(query);
+
+      const row = res.rows[0];
+
+      console.log("below is the row:")
+      console.log(row);
+
+      const gradeLevel = new this(row);
+
+      return gradeLevel;
+    } catch (err) {
+      console.error("Error finding grade level:", err);
+    }
   }
 
   getData(fieldName = null) {
