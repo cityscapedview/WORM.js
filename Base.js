@@ -1,6 +1,6 @@
-import { getinstance } from "./database.js";
+import { getInstance } from "./Database.js";
 
-let db = getinstance();
+let db = getInstance();
 
 export class Base {
   #data;
@@ -12,10 +12,12 @@ export class Base {
   static async create(grade) {
     try {
       // TODO: Abstract into a function for query.
+      let query;
+
       if (this.schema.tableName == "grade_levels") {
-        const query = {
+        query = {
           name: "create-grade",
-          text: "INSERT INTO this.schema.tableName(grade_level_code, grade_level_name) VALUES($1, $2) RETURNING *",
+          text: `INSERT INTO ${this.schema.tableName}(grade_level_code, grade_level_name) VALUES($1, $2) RETURNING *`,
           values: [grade.grade_level_code, grade.grade_level_name],
         };
       }
@@ -24,7 +26,7 @@ export class Base {
 
       const row = res.rows[0];
 
-      console.log("below is the row:")
+      console.log("below is the row:");
       console.log(row);
 
       const gradeLevel = new this(row);
@@ -36,9 +38,10 @@ export class Base {
   }
 
   getData(fieldName = null) {
-    if (this.#data[fieldName]) {
-      console.log(this.#data[fieldName])
+    if (fieldName in this.#data) {
       return this.#data[fieldName];
+    } else if (fieldName != null && !(fieldName in this.#data)) {
+      throw new Error(`Could not find field name:${fieldName}`);
     }
 
     return this.#data;
@@ -54,11 +57,11 @@ export class Base {
   }
 
   // static async find(gradeLevelId) {
-    // handle caching later
-    //
-    // if (cachedGradeLevelIds[gradeLevelId]) {
-    //   return cachedGradeLevelIds[gradeLevelId];
-    // }
+  // handle caching later
+  //
+  // if (cachedGradeLevelIds[gradeLevelId]) {
+  //   return cachedGradeLevelIds[gradeLevelId];
+  // }
 
   //   try {
   //     const query = {
@@ -82,4 +85,3 @@ export class Base {
     return str.replace(/_([a-z])/g, (match) => match[1].toUpperCase());
   }
 }
-

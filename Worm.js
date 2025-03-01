@@ -8,6 +8,9 @@ let db = getInstance();
 
 (async () => {
   await db.connection();
+
+  await db.queryDb("BEGIN;");
+
   // Now you got a database connection to work with
 
   // const res = await db.query("SELECT NOW()");
@@ -28,19 +31,24 @@ let db = getInstance();
   // console.log("Below is the public property.");
   // console.log(school.schoolName);
 
-  // 1) Create GradeLevel
+  // 1) Create GradeLeve
 
   const eighthGl = await GradeLevel.create({
-    grade_level_code: "32",
-    grade_level_name: "32th Grade",
+    grade_level_code: "34",
+    grade_level_name: "",
   });
 
   console.log("Below is the instantiated instance.");
-  console.log(eighthGl);
+  console.log(eighthGl.getData());
 
-  console.log("Below is the public property.");
-  console.log(eighthGl.gradeLevelCode);
-  console.log(eighthGl.gradeLevelName);
+  // console.log("Below is the public property.");
+  // try {
+  //   console.log(eighthGl.getData("grade_leve_code"));
+  // } catch (err) {
+  //   console.error("abeeek:", err);
+  // }
+
+  console.log({ grade_level_name: eighthGl.getData("grade_level_name") });
 
   // 2) Find method
 
@@ -162,5 +170,6 @@ let db = getInstance();
   // await school.restore();
   // console.log(`${school.schoolName} was restored. `);
 
+  await db.queryDb("ROLLBACK;");
   await db.close();
 })();

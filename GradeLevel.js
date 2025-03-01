@@ -1,7 +1,7 @@
 import { Base } from "./Base.js";
-import { getinstance } from "./database.js";
+import { getInstance } from "./Database.js";
 
-let db = getinstance();
+let db = getInstance();
 
 const cachedGradeLevelIds = {};
 
@@ -17,15 +17,6 @@ export class GradeLevel extends Base {
       created_at: { usePostgresDefault: true },
     },
   };
-
-  constructor(row) {
-    super(row);
-    this.schema.columns.grade_level_id = row.grade_level_id;
-    this.schema.columns.grade_level_code = row.grade_level_code;
-    this.schema.columns.grade_level_name = row.grade_level_name;
-    this.schema.columns.updated_at = row.updated_at;
-    this.schema.columns.created_at = row.created_at;
-  }
 
   // TODO: abstract to base class
   static async find(gradeLevelId) {
