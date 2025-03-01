@@ -21,25 +21,25 @@ let db = getInstance();
 
   // 1) Create School
 
-  // const school = await School.create({
-  //   school_name: "Scout Academy",
-  // });
-
-  // console.log("Below is the instantiated instance.");
-  // console.log(school);
-
-  // console.log("Below is the public property.");
-  // console.log(school.schoolName);
-
-  // 1) Create GradeLeve
-
-  const eighthGl = await GradeLevel.create({
-    grade_level_code: "34",
-    grade_level_name: "",
+  const school = await School.create({
+    school_name: "Scout Academy",
   });
 
   console.log("Below is the instantiated instance.");
-  console.log(eighthGl.getData());
+  console.log(school);
+
+  // console.log("Below is the public property.");
+  // console.log(school.getData("schoolName"));
+
+  // 1) Create GradeLeve
+
+  // const eighthGl = await GradeLevel.create({
+  //   grade_level_code: "34",
+  //   grade_level_name: "",
+  // });
+
+  // console.log("Below is the instantiated instance.");
+  // console.log(eighthGl.getData());
 
   // console.log("Below is the public property.");
   // try {
@@ -48,7 +48,7 @@ let db = getInstance();
   //   console.error("abeeek:", err);
   // }
 
-  console.log({ grade_level_name: eighthGl.getData("grade_level_name") });
+  // console.log({ grade_level_name: eighthGl.getData("grade_level_name") });
 
   // 2) Find method
 

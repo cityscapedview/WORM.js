@@ -9,18 +9,23 @@ export class Base {
     this.#data = data;
   }
 
-  static async create(grade) {
+  static async create(classData) {
     try {
-      // TODO: Abstract into a function for query.
       let query;
 
       if (this.schema.tableName == "grade_levels") {
         query = {
           name: "create-grade",
           text: `INSERT INTO ${this.schema.tableName}(grade_level_code, grade_level_name) VALUES($1, $2) RETURNING *`,
-          values: [grade.grade_level_code, grade.grade_level_name],
+          values: [classData.grade_level_code, classData.grade_level_name],
         };
-      }
+      } else if (this.schema.tableName == "schools") {
+        query = {
+          name: "create-school",
+          text: `INSERT INTO ${this.schema.tableName}(school_name) VALUES($1) RETURNING *`,
+          values: [classData.school_name],
+        };
+      };
 
       const res = await db.queryDb(query);
 
@@ -29,11 +34,12 @@ export class Base {
       console.log("below is the row:");
       console.log(row);
 
-      const gradeLevel = new this(row);
+      const childClass = new this(row);
 
-      return gradeLevel;
+      return childClass;
     } catch (err) {
-      console.error("Error finding grade level:", err);
+      // let's update this to a better error handling message.
+      console.error("Error finding child class:", err);
     }
   }
 
