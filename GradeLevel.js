@@ -97,7 +97,7 @@ export class GradeLevel extends Base {
 
   // TODO: abstract to base class
   getId() {
-    return this.gradeLevelId;
+    return this.getData("grade_level_id");
   }
 
   async #deleteGradeLevelAff() {

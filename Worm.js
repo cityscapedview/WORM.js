@@ -29,17 +29,17 @@ let db = getInstance();
   console.log(school);
 
   // console.log("Below is the public property.");
-  // console.log(school.getData("schoolName"));
+  // console.log(school.getData("school_name"));
 
-  // 1) Create GradeLeve
+  // 1) Create GradeLevel
 
-  // const eighthGl = await GradeLevel.create({
-  //   grade_level_code: "34",
-  //   grade_level_name: "",
-  // });
+  const gradeLevel = await GradeLevel.create({
+    grade_level_code: "34",
+    grade_level_name: "",
+  });
 
-  // console.log("Below is the instantiated instance.");
-  // console.log(eighthGl.getData());
+  console.log("Below is the instantiated instance.");
+  console.log(gradeLevel);
 
   // console.log("Below is the public property.");
   // try {
@@ -49,6 +49,21 @@ let db = getInstance();
   // }
 
   // console.log({ grade_level_name: eighthGl.getData("grade_level_name") });
+
+  // 1) Create Student
+
+  //  You will have to make a getId function. maybe on base?
+  //   Instantiate a school
+  //   Instantiate a gradeLevel
+  //
+
+  const student = await Student.create({
+    student_name: "Magic Tookie",
+    school_id: school.getId(),
+    grade_level_id: gradeLevel.getId(),
+  });
+
+  console.log(student.getData());
 
   // 2) Find method
 
@@ -60,21 +75,6 @@ let db = getInstance();
 
   // const studentTest = await Student.find(14);
   // console.log(studentTest);
-
-  // 1) Create Student
-
-  //  You will have to make a getId function. maybe on base?
-  //   Instantiate a school
-  //   Instantiate a gradeLevel
-  //
-
-  // const student = await Student.create({
-  //   student_name: "Magic Tookie",
-  //   school_id: school.getId(),
-  //   grade_level_id: gradeLevel.getId(),
-  // });
-
-  // console.log(student);
 
   // 3) Find By Grade Code.
 

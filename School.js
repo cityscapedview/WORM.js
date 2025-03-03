@@ -14,7 +14,7 @@ export class School extends Base {
       school_name: {},
       created_at: { usePostgresDefault: true },
       updated_at: { usePostgresDefault: true },
-      deleted_at: {}
+      deleted_at: {},
     },
   };
 
@@ -108,7 +108,7 @@ export class School extends Base {
 
   // TODO: abstract to base class
   getId() {
-    return this.schoolId;
+    return this.getData("school_id");
   }
 
   // TODO: abstract to base class and DRY

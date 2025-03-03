@@ -25,14 +25,22 @@ export class Base {
           text: `INSERT INTO ${this.schema.tableName}(school_name) VALUES($1) RETURNING *`,
           values: [classData.school_name],
         };
-      };
+      } else if (this.schema.tableName == "students") {
+        query = {
+          name: "create-student",
+          text: `INSERT INTO ${this.schema.tableName}(student_name, school_id, grade_level_id) VALUES($1, $2, $3) RETURNING *`,
+          values: [
+            classData.student_name,
+            classData.school_id,
+            classData.grade_level_id,
+          ],
+        };
+        // TODO: create else error.
+      }
 
       const res = await db.queryDb(query);
 
       const row = res.rows[0];
-
-      console.log("below is the row:");
-      console.log(row);
 
       const childClass = new this(row);
 
