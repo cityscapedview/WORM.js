@@ -106,11 +106,6 @@ export class School extends Base {
     }
   }
 
-  // TODO: abstract to base class
-  // getId() {
-  //   return this.getData("school_id");
-  // }
-
   // TODO: abstract to base class and DRY
   async delete() {
     try {
