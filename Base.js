@@ -70,30 +70,14 @@ export class Base {
     }
   }
 
-  // static async find(gradeLevelId) {
-  // handle caching later
-  //
-  // if (cachedGradeLevelIds[gradeLevelId]) {
-  //   return cachedGradeLevelIds[gradeLevelId];
-  // }
+  getId() {
+    let primaryKey = this.#getPrimaryKey();
+    return this.getData(primaryKey);
+  }
 
-  //   try {
-  //     const query = {
-  //       name: "fetch-grade-level",
-  //       text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
-  //       values: [gradeLevelId],
-  //     };
-
-  //     const res = await db.queryDb(query);
-
-  //     const row = res.rows[0];
-  //     const gradeLevel = new GradeLevel(row);
-  //     cachedGradeLevelIds[gradeLevelId] = gradeLevel;
-  //     return gradeLevel;
-  //   } catch (err) {
-  //     console.error("Error finding grade level:", err);
-  //   }
-  // }
+  #getPrimaryKey() {
+    return this.constructor.schema.primaryKey;
+  }
 
   #snakeToCamel(str) {
     return str.replace(/_([a-z])/g, (match) => match[1].toUpperCase());

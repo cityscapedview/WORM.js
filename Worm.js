@@ -26,7 +26,7 @@ let db = getInstance();
   });
 
   console.log("Below is the instantiated instance.");
-  console.log(school);
+  console.log(school.getData());
 
   // console.log("Below is the public property.");
   // console.log(school.getData("school_name"));
@@ -39,7 +39,7 @@ let db = getInstance();
   });
 
   console.log("Below is the instantiated instance.");
-  console.log(gradeLevel);
+  console.log(gradeLevel.getData());
 
   // console.log("Below is the public property.");
   // try {
@@ -56,6 +56,8 @@ let db = getInstance();
   //   Instantiate a school
   //   Instantiate a gradeLevel
   //
+  // console.log("get id:");
+  // console.log(school.getId());
 
   const student = await Student.create({
     student_name: "Magic Tookie",
@@ -63,7 +65,7 @@ let db = getInstance();
     grade_level_id: gradeLevel.getId(),
   });
 
-  console.log(student.getData());
+  // console.log(student.getData());
 
   // 2) Find method
 
