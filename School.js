@@ -6,35 +6,17 @@ let db = getInstance();
 const cachedSchoolIds = {};
 
 export class School extends Base {
-  constructor(row) {
-    super();
-    this.schoolId = row.school_id;
-    this.schoolName = row.school_name;
-    this.createdAt = row.created_at;
-    this.updatedAt = row.updated_at;
-    this.deletedAt = row.deleted_at;
-  }
-
-  static async create(school) {
-    // TODO: Let's abstract the values from the incoming object so it is clean code.
-
-    try {
-      const query = {
-        name: "create-school",
-        text: "INSERT INTO schools(school_name) VALUES($1) RETURNING *",
-        values: [school.school_name],
-      };
-      const res = await db.queryDb(query);
-
-      const row = res.rows[0];
-
-      const schoolInstances = new School(row);
-
-      return schoolInstances;
-    } catch (err) {
-      console.error("Error creating school:", err);
-    }
-  }
+  static schema = {
+    tableName: "schools",
+    primaryKey: "school_id",
+    columns: {
+      school_id: { usePostgresDefault: true },
+      school_name: {},
+      created_at: { usePostgresDefault: true },
+      updated_at: { usePostgresDefault: true },
+      deleted_at: {},
+    },
+  };
 
   // TODO: abstract to base class
   static async find(db) {
@@ -122,11 +104,6 @@ export class School extends Base {
     } catch (err) {
       console.error("Error updating grade levels:", err);
     }
-  }
-
-  // TODO: abstract to base class
-  getId() {
-    return this.schoolId;
   }
 
   // TODO: abstract to base class and DRY

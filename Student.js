@@ -11,37 +11,19 @@ export class Student extends Base {
   #school;
   #gradeLevel;
 
-  constructor(row) {
-    super();
-    this.studentId = row.student_id;
-    this.studentName = row.student_name;
-    this.gradeLevelId = row.grade_level_id;
-    this.schoolId = row.school_id;
-    this.createdAt = row.created_at;
-    this.updatedAt = row.updated_at;
-    this.deletedAt = row.deleted_at;
-  }
-
-  // TODO: Let's abstract the values from the incoming object so it is clean code.
-  static async create(student) {
-    try {
-      const query = {
-        name: "create-student",
-        text: "INSERT INTO students(student_name, school_id, grade_level_id) VALUES($1, $2, $3) RETURNING *",
-        values: [student.student_name, student.school_id, student.grade_level_id],
-      };
-
-      const res = await db.queryDb(query);
-
-      const row = res.rows[0];
-
-      return new Student(row);
-    } catch (err) {
-      console.error("Error creating student:", err);
-    }
-  }
-
-  // TODO: abstract to base class
+  static schema = {
+    tableName: "students",
+    primaryKey: "student_id",
+    columns: {
+      student_id: { usePostgresDefault: true },
+      student_name: {},
+      grade_level_id: {},
+      school_id: {},
+      created_at: { usePostgresDefault: true },
+      updated_at: { usePostgresDefault: true },
+      deleted_at: {},
+    },
+  };
 
   static async find(studentId) {
     if (cachedStudentIds[studentId]) {

@@ -8,6 +8,9 @@ let db = getInstance();
 
 (async () => {
   await db.connection();
+
+  await db.queryDb("BEGIN;");
+
   // Now you got a database connection to work with
 
   // const res = await db.query("SELECT NOW()");
@@ -18,29 +21,51 @@ let db = getInstance();
 
   // 1) Create School
 
-  // const school = await School.create({
-  //   school_name: "Scout Academy",
-  // });
+  const school = await School.create({
+    school_name: "Scout Academy",
+  });
 
-  // console.log("Below is the instantiated instance.");
-  // console.log(school);
+  console.log("Below is the instantiated instance.");
+  console.log(school.getData());
 
   // console.log("Below is the public property.");
-  // console.log(school.schoolName);
+  // console.log(school.getData("school_name"));
 
   // 1) Create GradeLevel
 
-  // const fourthGl = await GradeLevel.create({
-  //   grade_level_code: "6",
-  //   grade_level_name: "6th Grade",
-  // });
+  const gradeLevel = await GradeLevel.create({
+    grade_level_code: "34",
+    grade_level_name: "",
+  });
 
-  // console.log("Below is the instantiated instance.");
-  // console.log(fourthGl);
+  console.log("Below is the instantiated instance.");
+  console.log(gradeLevel.getData());
 
   // console.log("Below is the public property.");
-  // console.log(fourthGl.gradeLevelCode);
-  // console.log(fourthGl.gradeLevelName);
+  // try {
+  //   console.log(eighthGl.getData("grade_leve_code"));
+  // } catch (err) {
+  //   console.error("abeeek:", err);
+  // }
+
+  // console.log({ grade_level_name: eighthGl.getData("grade_level_name") });
+
+  // 1) Create Student
+
+  //  You will have to make a getId function. maybe on base?
+  //   Instantiate a school
+  //   Instantiate a gradeLevel
+  //
+  // console.log("get id:");
+  // console.log(school.getId());
+
+  const student = await Student.create({
+    student_name: "Magic Tookie",
+    school_id: school.getId(),
+    grade_level_id: gradeLevel.getId(),
+  });
+
+  // console.log(student.getData());
 
   // 2) Find method
 
@@ -52,21 +77,6 @@ let db = getInstance();
 
   // const studentTest = await Student.find(14);
   // console.log(studentTest);
-
-  // 1) Create Student
-
-  //  You will have to make a getId function. maybe on base?
-  //   Instantiate a school
-  //   Instantiate a gradeLevel
-  //
-
-  // const student = await Student.create({
-  //   student_name: "Magic Tookie",
-  //   school_id: school.getId(),
-  //   grade_level_id: gradeLevel.getId(),
-  // });
-
-  // console.log(student);
 
   // 3) Find By Grade Code.
 
@@ -155,12 +165,13 @@ let db = getInstance();
   // await stu.restore();
   // console.log(`${stu.studentName} was restored. `);
 
-  const school = await School.find(3);
-  await school.softDelete();
-  console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
+  // const school = await School.find(3);
+  // await school.softDelete();
+  // console.log(`${school.schoolName} was soft deleted on ${school.deletedAt}`);
 
-  await school.restore();
-  console.log(`${school.schoolName} was restored. `);
+  // await school.restore();
+  // console.log(`${school.schoolName} was restored. `);
 
+  await db.queryDb("ROLLBACK;");
   await db.close();
 })();
