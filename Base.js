@@ -51,6 +51,50 @@ export class Base {
     }
   }
 
+  static async find(classData) {
+    if (cachedSchoolIds[schoolId]) {
+      return cachedSchoolIds[schoolId];
+    }
+
+    let query;
+
+    try {
+      // Update grade_levels query
+      if (this.schema.tableName == "grade_levels") {
+        query = {
+          name: "create-grade",
+          text: `INSERT INTO ${this.schema.tableName}(grade_level_code, grade_level_name) VALUES($1, $2) RETURNING *`,
+          values: [classData.grade_level_code, classData.grade_level_name],
+        };
+      } else if (this.schema.tableName == "schools") {
+        query = {
+            name: "fetch-school",
+            text: "SELECT * FROM schools WHERE school_id = $1",
+            values: [classData.school_id],
+          };
+      // Update students query
+      } else if (this.schema.tableName == "students") {
+        query = {
+          name: "create-student",
+          text: `INSERT INTO ${this.schema.tableName}(student_name, school_id, grade_level_id) VALUES($1, $2, $3) RETURNING *`,
+          values: [
+            classData.student_name,
+            classData.school_id,
+            classData.grade_level_id,
+          ],
+        };
+
+      const res = await db.queryDb(query);
+
+      const row = res.rows[0];
+      const school = new School(row);
+      cachedSchoolIds[schoolId] = school;
+      return school;
+    } catch (err) {
+      console.error("Error finding school:", err);
+    }
+  }
+
   getData(fieldName = null) {
     if (fieldName in this.#data) {
       return this.#data[fieldName];
