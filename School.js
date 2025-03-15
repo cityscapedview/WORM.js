@@ -3,7 +3,8 @@ import { getInstance } from "./Database.js";
 
 let db = getInstance();
 
-const cachedSchoolIds = {};
+// remove me
+// const cachedSchoolIds = {};
 
 export class School extends Base {
   static schema = {

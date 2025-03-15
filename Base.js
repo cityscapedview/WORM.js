@@ -52,19 +52,20 @@ export class Base {
   }
 
   static async find(classData) {
-    if (cachedSchoolIds[schoolId]) {
-      return cachedSchoolIds[schoolId];
-    }
+  // this needs to be modified to cache all three instances across children
+  // as single instance.
+    // if (cachedSchoolIds[schoolId]) {
+    //   return cachedSchoolIds[schoolId];
+    // }
 
     let query;
 
     try {
-      // Update grade_levels query
       if (this.schema.tableName == "grade_levels") {
         query = {
-          name: "create-grade",
-          text: `INSERT INTO ${this.schema.tableName}(grade_level_code, grade_level_name) VALUES($1, $2) RETURNING *`,
-          values: [classData.grade_level_code, classData.grade_level_name],
+          name: "fetch-grade-level",
+          text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
+          values: [gradeLevelId],
         };
       } else if (this.schema.tableName == "schools") {
         query = {
@@ -72,24 +73,21 @@ export class Base {
             text: "SELECT * FROM schools WHERE school_id = $1",
             values: [classData.school_id],
           };
-      // Update students query
       } else if (this.schema.tableName == "students") {
         query = {
-          name: "create-student",
-          text: `INSERT INTO ${this.schema.tableName}(student_name, school_id, grade_level_id) VALUES($1, $2, $3) RETURNING *`,
-          values: [
-            classData.student_name,
-            classData.school_id,
-            classData.grade_level_id,
-          ],
+          name: "fetch-grade-level",
+          text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
+          values: [gradeLevelId],
         };
+      };
 
       const res = await db.queryDb(query);
 
       const row = res.rows[0];
-      const school = new School(row);
-      cachedSchoolIds[schoolId] = school;
-      return school;
+
+      const childClass = new this(row);
+      // cachedSchoolIds[schoolId] = school;
+      return childClass;
     } catch (err) {
       console.error("Error finding school:", err);
     }

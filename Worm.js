@@ -11,13 +11,6 @@ let db = getInstance();
 
   await db.queryDb("BEGIN;");
 
-  // Now you got a database connection to work with
-
-  // const res = await db.query("SELECT NOW()");
-
-  // console.log("res");
-
-  // test stuff
 
   // 1) Create School
 
@@ -69,8 +62,9 @@ let db = getInstance();
 
   // 2) Find method
 
-  // const school = await School.find(3);
-  // console.log(school);
+  const getSchool = await School.find(1);
+  console.log("this is a school");
+  console.log(getSchool);
 
   // const gradeLevel = await GradeLevel.find(3);
   // console.log(gradeLevel);
