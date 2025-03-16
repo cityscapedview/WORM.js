@@ -2,6 +2,8 @@ import { getInstance } from "./Database.js";
 
 let db = getInstance();
 
+const cachedPrimaryIds = {};
+
 export class Base {
   #data;
 
@@ -52,11 +54,10 @@ export class Base {
   }
 
   static async find(classData) {
-  // this needs to be modified to cache all three instances across children
-  // as single instance.
-    // if (cachedSchoolIds[schoolId]) {
-    //   return cachedSchoolIds[schoolId];
-    // }
+
+    if (cachedPrimaryIds[this.schema.primaryKey]) {
+      return cachedPrimaryIds[this.schema.primaryKey];
+    }
 
     let query;
 
@@ -65,7 +66,7 @@ export class Base {
         query = {
           name: "fetch-grade-level",
           text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
-          values: [gradeLevelId],
+          values: [classData.grade_level_id],
         };
       } else if (this.schema.tableName == "schools") {
         query = {
@@ -75,9 +76,9 @@ export class Base {
           };
       } else if (this.schema.tableName == "students") {
         query = {
-          name: "fetch-grade-level",
-          text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
-          values: [gradeLevelId],
+          name: "fetch-student",
+          text: "SELECT * FROM students WHERE student_id = $1",
+          values: [classData.student_Id],
         };
       };
 
@@ -86,7 +87,9 @@ export class Base {
       const row = res.rows[0];
 
       const childClass = new this(row);
-      // cachedSchoolIds[schoolId] = school;
+
+      cachedPrimaryIds[this.schema.primaryKey];
+
       return childClass;
     } catch (err) {
       console.error("Error finding school:", err);

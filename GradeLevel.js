@@ -3,8 +3,6 @@ import { getInstance } from "./Database.js";
 
 let db = getInstance();
 
-const cachedGradeLevelIds = {};
-
 export class GradeLevel extends Base {
   static schema = {
     tableName: "grade_levels",
@@ -17,30 +15,6 @@ export class GradeLevel extends Base {
       created_at: { usePostgresDefault: true },
     },
   };
-
-  // TODO: abstract to base class
-  static async find(gradeLevelId) {
-    if (cachedGradeLevelIds[gradeLevelId]) {
-      return cachedGradeLevelIds[gradeLevelId];
-    }
-
-    try {
-      const query = {
-        name: "fetch-grade-level",
-        text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
-        values: [gradeLevelId],
-      };
-
-      const res = await db.queryDb(query);
-
-      const row = res.rows[0];
-      const gradeLevel = new GradeLevel(row);
-      cachedGradeLevelIds[gradeLevelId] = gradeLevel;
-      return gradeLevel;
-    } catch (err) {
-      console.error("Error finding grade level:", err);
-    }
-  }
 
   // TODO: DRY this code with find
   static async findByCode(gradeLevelCode) {
