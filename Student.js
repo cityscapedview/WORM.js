@@ -5,8 +5,6 @@ import { getInstance } from "./Database.js";
 
 let db = getInstance();
 
-const cachedStudentIds = {};
-
 export class Student extends Base {
   #school;
   #gradeLevel;
@@ -24,30 +22,6 @@ export class Student extends Base {
       deleted_at: {},
     },
   };
-
-  static async find(studentId) {
-    if (cachedStudentIds[studentId]) {
-      return cachedStudentIds[studentId];
-    }
-
-    try {
-      const query = {
-        name: "fetch-student",
-        text: "SELECT * FROM students WHERE student_id = $1",
-        values: [studentId],
-      };
-
-      const res = await db.queryDb(query);
-
-      const row = res.rows[0];
-
-      const student = new Student(row);
-      cachedStudentIds[studentId] = student;
-      return student;
-    } catch (err) {
-      console.error("Error finding student:", err);
-    }
-  }
 
   // TODO: abstract to base?
   // Question: should this instantiate an instance of each student and return that? or is this ok?

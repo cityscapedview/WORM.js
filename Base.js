@@ -2,6 +2,8 @@ import { getInstance } from "./Database.js";
 
 let db = getInstance();
 
+const cachedPrimaryIds = {};
+
 export class Base {
   #data;
 
@@ -48,6 +50,49 @@ export class Base {
     } catch (err) {
       // let's update this to a better error handling message.
       console.error("Error finding child class:", err);
+    }
+  }
+
+  static async find(classData) {
+
+    if (cachedPrimaryIds[this.schema.primaryKey]) {
+      return cachedPrimaryIds[this.schema.primaryKey];
+    }
+
+    let query;
+
+    try {
+      if (this.schema.tableName == "grade_levels") {
+        query = {
+          name: "fetch-grade-level",
+          text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
+          values: [classData.grade_level_id],
+        };
+      } else if (this.schema.tableName == "schools") {
+        query = {
+            name: "fetch-school",
+            text: "SELECT * FROM schools WHERE school_id = $1",
+            values: [classData.school_id],
+          };
+      } else if (this.schema.tableName == "students") {
+        query = {
+          name: "fetch-student",
+          text: "SELECT * FROM students WHERE student_id = $1",
+          values: [classData.student_Id],
+        };
+      };
+
+      const res = await db.queryDb(query);
+
+      const row = res.rows[0];
+
+      const childClass = new this(row);
+
+      cachedPrimaryIds[this.schema.primaryKey];
+
+      return childClass;
+    } catch (err) {
+      console.error("Error finding school:", err);
     }
   }
 

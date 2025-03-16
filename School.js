@@ -3,8 +3,6 @@ import { getInstance } from "./Database.js";
 
 let db = getInstance();
 
-const cachedSchoolIds = {};
-
 export class School extends Base {
   static schema = {
     tableName: "schools",
@@ -17,30 +15,6 @@ export class School extends Base {
       deleted_at: {},
     },
   };
-
-  // TODO: abstract to base class
-  static async find(db) {
-    if (cachedSchoolIds[schoolId]) {
-      return cachedSchoolIds[schoolId];
-    }
-
-    try {
-      const query = {
-        name: "fetch-school",
-        text: "SELECT * FROM schools WHERE school_id = $1",
-        values: [schoolId],
-      };
-
-      const res = await db.queryDb(query);
-
-      const row = res.rows[0];
-      const school = new School(row);
-      cachedSchoolIds[schoolId] = school;
-      return school;
-    } catch (err) {
-      console.error("Error finding school:", err);
-    }
-  }
 
   // TODO: abstract to base?
   // Question: should this instantiate an instance of each school and return that? or is this ok?

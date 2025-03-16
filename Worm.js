@@ -11,35 +11,28 @@ let db = getInstance();
 
   await db.queryDb("BEGIN;");
 
-  // Now you got a database connection to work with
-
-  // const res = await db.query("SELECT NOW()");
-
-  // console.log("res");
-
-  // test stuff
 
   // 1) Create School
 
-  const school = await School.create({
-    school_name: "Scout Academy",
-  });
-
-  console.log("Below is the instantiated instance.");
-  console.log(school.getData());
+  // const school = await School.create({
+  //   school_name: "Scout Academy",
+  // });
+  //
+  // console.log("Below is the instantiated instance.");
+  // console.log(school.getData());
 
   // console.log("Below is the public property.");
   // console.log(school.getData("school_name"));
 
   // 1) Create GradeLevel
 
-  const gradeLevel = await GradeLevel.create({
-    grade_level_code: "34",
-    grade_level_name: "",
-  });
-
-  console.log("Below is the instantiated instance.");
-  console.log(gradeLevel.getData());
+  // const gradeLevel = await GradeLevel.create({
+  //   grade_level_code: "34",
+  //   grade_level_name: "",
+  // });
+  //
+  // console.log("Below is the instantiated instance.");
+  // console.log(gradeLevel.getData());
 
   // console.log("Below is the public property.");
   // try {
@@ -59,24 +52,24 @@ let db = getInstance();
   // console.log("get id:");
   // console.log(school.getId());
 
-  const student = await Student.create({
-    student_name: "Magic Tookie",
-    school_id: school.getId(),
-    grade_level_id: gradeLevel.getId(),
-  });
+  // const student = await Student.create({
+  //   student_name: "Magic Tookie",
+  //   school_id: school.getId(),
+  //   grade_level_id: gradeLevel.getId(),
+  // });
 
   // console.log(student.getData());
 
   // 2) Find method
 
-  // const school = await School.find(3);
-  // console.log(school);
+  const getSchool = await School.find(1);
+  console.log(getSchool);
 
-  // const gradeLevel = await GradeLevel.find(3);
-  // console.log(gradeLevel);
+  const gradeLevel = await GradeLevel.find(1);
+  console.log(gradeLevel);
 
-  // const studentTest = await Student.find(14);
-  // console.log(studentTest);
+  const studentTest = await Student.find(1);
+  console.log(studentTest);
 
   // 3) Find By Grade Code.
 
