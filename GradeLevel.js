@@ -35,22 +35,6 @@ export class GradeLevel extends Base {
     }
   }
 
-  // TODO: abstract to base?
-  // Question: should this instantiate an instance of each grade level and return that? or is this ok?
-  static async fetchAll() {
-    try {
-      const query = {
-        name: "fetch-all-gradelevels",
-        text: "SELECT * FROM grade_levels",
-      };
-      const res = await db.queryDb(query);
-
-      return res.rows;
-    } catch (err) {
-      console.error("error finding grade levels:", err);
-    }
-  }
-
   // TODO: abstract to base class and DRY
   async delete() {
     try {

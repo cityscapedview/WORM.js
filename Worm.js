@@ -26,13 +26,13 @@ let db = getInstance();
 
   // 1) Create GradeLevel
 
-  // const gradeLevel = await GradeLevel.create({
-  //   grade_level_code: "34",
-  //   grade_level_name: "",
-  // });
+  const gradeLevel = await GradeLevel.create({
+    grade_level_code: "1",
+    grade_level_name: "first",
+  });
   //
-  // console.log("Below is the instantiated instance.");
-  // console.log(gradeLevel.getData());
+  console.log("Below is the instantiated instance.");
+  console.log(gradeLevel.getData());
 
   // console.log("Below is the public property.");
   // try {
@@ -62,14 +62,14 @@ let db = getInstance();
 
   // 2) Find method
 
-  const getSchool = await School.find(1);
-  console.log(getSchool);
-
-  const gradeLevel = await GradeLevel.find(1);
-  console.log(gradeLevel);
-
-  const studentTest = await Student.find(1);
-  console.log(studentTest);
+  // const getSchool = await School.find(1);
+  // console.log(getSchool);
+  //
+  // const gradeLevel = await GradeLevel.find(1);
+  // console.log(gradeLevel);
+  //
+  // const studentTest = await Student.find(1);
+  // console.log(studentTest);
 
   // 3) Find By Grade Code.
 
@@ -106,10 +106,11 @@ let db = getInstance();
 
   // 5) FetchAll Method
 
-  // const tallGrades = (await GradeLevel.fetchAll());
-  // console.log(tallGrades)
-  // const allGrades = (await GradeLevel.fetchAll()).map((gl) => gl.grade_level_name);
-  // console.log(`${allGrades.join(", ")}`);
+  const tallGrades = (await GradeLevel.fetchAll());
+  console.log("all grades:");
+  console.log(tallGrades);
+  const allGrades = (await GradeLevel.fetchAll()).map((gl) => gl.grade_level_name);
+  console.log(`${allGrades.join(", ")}`);
 
   // 6) updateGradeLevels Method
 
