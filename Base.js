@@ -92,7 +92,36 @@ export class Base {
 
       return childClass;
     } catch (err) {
-      console.error("Error finding school:", err);
+      console.error("Error finding results:", err);
+    }
+  }
+
+  static async fetchAll() {
+      let query;
+
+      if (this.schema.tableName == "grade_levels") {
+        query = {
+          name: "fetch-all-gradelevels",
+          text: "SELECT * FROM grade_levels",
+        };
+      } else if (this.schema.tableName == "schools") {
+        query = {
+          name: "fetch-all-schools",
+          text: "SELECT * FROM schools",
+        };
+      } else if (this.schema.tableName == "students") {
+        query = {
+          name: "fetch-all-students",
+          text: "SELECT * FROM schools",
+        };
+      };
+
+    try {
+      const res = await db.queryDb(query);
+
+      return res.rows;
+    } catch (err) {
+      console.error("error finding results:", err);
     }
   }
 
