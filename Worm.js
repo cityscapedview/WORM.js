@@ -9,7 +9,7 @@ let db = getInstance();
 (async () => {
   await db.connection();
 
-  await db.queryDb("BEGIN;");
+  // await db.queryDb("BEGIN;");
 
 
   // 1) Create School
@@ -17,7 +17,7 @@ let db = getInstance();
   // const school = await School.create({
   //   school_name: "Scout Academy",
   // });
-  //
+  // //
   // console.log("Below is the instantiated instance.");
   // console.log(school.getData());
 
@@ -26,13 +26,13 @@ let db = getInstance();
 
   // 1) Create GradeLevel
 
-  const gradeLevel = await GradeLevel.create({
-    grade_level_code: "1",
-    grade_level_name: "first",
-  });
-  //
-  console.log("Below is the instantiated instance.");
-  console.log(gradeLevel.getData());
+  // const gradeLevel = await GradeLevel.create({
+  //   grade_level_code: "1",
+  //   grade_level_name: "first",
+  // });
+  // //
+  // console.log("Below is the instantiated instance.");
+  // console.log(gradeLevel.getData());
 
   // console.log("Below is the public property.");
   // try {
@@ -79,14 +79,16 @@ let db = getInstance();
 
   // 4) Save Method
 
-  // const schoolChosen = await School.find(1);
-  // console.log("school chosen!");
-  // console.log(schoolChosen);
+  const schoolChosen = await School.find(44);
+  console.log("school chosen!");
+  console.log(schoolChosen);
+  // console.log(schoolChosen.getData());
 
-  // schoolChosen.setData({ school_name: "Tookerbacker Uni" });
+  schoolChosen.setData({ school_name: "Tookerbacker Uni" });
 
-  // await schoolChosen.save();
-  // console.log(schoolChosen);
+  await schoolChosen.save();
+  console.log("shool after save:");
+  console.log(schoolChosen);
 
   // const student = await Student.find(14);
   // console.log(student);
@@ -106,11 +108,11 @@ let db = getInstance();
 
   // 5) FetchAll Method
 
-  const tallGrades = (await GradeLevel.fetchAll());
-  console.log("all grades:");
-  console.log(tallGrades);
-  const allGrades = (await GradeLevel.fetchAll()).map((gl) => gl.grade_level_name);
-  console.log(`${allGrades.join(", ")}`);
+  // const tallGrades = (await GradeLevel.fetchAll());
+  // console.log("all grades:");
+  // console.log(tallGrades);
+  // const allGrades = (await GradeLevel.fetchAll()).map((gl) => gl.grade_level_name);
+  // console.log(`${allGrades.join(", ")}`);
 
   // 6) updateGradeLevels Method
 
@@ -166,6 +168,6 @@ let db = getInstance();
   // await school.restore();
   // console.log(`${school.schoolName} was restored. `);
 
-  await db.queryDb("ROLLBACK;");
+  // await db.queryDb("ROLLBACK;");
   await db.close();
 })();

@@ -23,31 +23,6 @@ export class Student extends Base {
     },
   };
 
-  // TODO: abstract to base if possible
-  // Different classes might need to change different values, could be a challenge.
-  async save() {
-    try {
-      const query = {
-        name: "save-student",
-        text: `
-        INSERT INTO students(student_id, student_name, updated_at)
-        VALUES ($1, $2, NOW())
-        ON CONFLICT (student_id)
-        DO UPDATE SET
-          student_name = EXCLUDED.student_name,
-          updated_at = NOW()
-        RETURNING *;
-      `,
-        values: [this.studentId, this.studentName],
-      };
-
-      const res = await db.queryDb(query);
-      console.log("Save Successful:", res.rows[0]);
-    } catch (err) {
-      console.error("Error during upsert:", err);
-    }
-  }
-
   async getGradeLevel(db) {
     if (this.#gradeLevel) {
       return this.#gradeLevel;
