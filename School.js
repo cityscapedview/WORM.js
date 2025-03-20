@@ -16,31 +16,6 @@ export class School extends Base {
     },
   };
 
-  // TODO: abstract to base if possible
-  // Different classes might need to change different values, could be a challenge.
-  async save() {
-    try {
-      const query = {
-        name: "save-school",
-        text: `
-        INSERT INTO schools (school_id, school_name, updated_at)
-        VALUES ($1, $2, NOW())
-        ON CONFLICT (school_id)
-        DO UPDATE SET
-          school_name = EXCLUDED.school_name,
-          updated_at = NOW()
-        RETURNING *;
-      `,
-        values: [this.schoolId, this.schoolName],
-      };
-
-      const res = await db.queryDb(query);
-      console.log("Save Successful:", res.rows[0]);
-    } catch (err) {
-      console.error("Error during upsert:", err);
-    }
-  }
-
   async updateGradeLevels(gradeLevels) {
     try {
       this.#deleteRow();

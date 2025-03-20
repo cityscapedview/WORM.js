@@ -2,7 +2,7 @@ import { getInstance } from "./Database.js";
 
 let db = getInstance();
 
-const cachedPrimaryIds = {};
+// const cachedPrimaryIds = {};
 
 export class Base {
   #data;
@@ -53,11 +53,11 @@ export class Base {
     }
   }
 
-  static async find(classData) {
+  static async find(classId) {
 
-    if (cachedPrimaryIds[this.schema.primaryKey]) {
-      return cachedPrimaryIds[this.schema.primaryKey];
-    }
+    // if (cachedPrimaryIds[this.schema.primaryKey]) {
+    //   return cachedPrimaryIds[this.schema.primaryKey];
+    // }
 
     let query;
 
@@ -66,19 +66,19 @@ export class Base {
         query = {
           name: "fetch-grade-level",
           text: "SELECT * FROM grade_levels WHERE grade_level_id = $1",
-          values: [classData.grade_level_id],
+          values: [classId],
         };
       } else if (this.schema.tableName == "schools") {
         query = {
             name: "fetch-school",
             text: "SELECT * FROM schools WHERE school_id = $1",
-            values: [classData.school_id],
+            values: [classId],
           };
       } else if (this.schema.tableName == "students") {
         query = {
           name: "fetch-student",
           text: "SELECT * FROM students WHERE student_id = $1",
-          values: [classData.student_Id],
+          values: [classId],
         };
       };
 
@@ -88,7 +88,7 @@ export class Base {
 
       const childClass = new this(row);
 
-      cachedPrimaryIds[this.schema.primaryKey];
+      // cachedPrimaryIds[this.schema.primaryKey];
 
       return childClass;
     } catch (err) {
@@ -122,6 +122,47 @@ export class Base {
       return res.rows;
     } catch (err) {
       console.error("error finding results:", err);
+    }
+  }
+
+  async save() {
+    try {
+      let query;
+
+      if (this.constructor.name == "School") {
+        query = {
+          name: "save-school",
+          text: `
+            INSERT INTO schools (school_id, school_name, updated_at)
+            VALUES ($1, $2, NOW())
+            ON CONFLICT (school_id)
+            DO UPDATE SET
+              school_name = EXCLUDED.school_name,
+              updated_at = NOW()
+            RETURNING *;
+          `,
+          values: [this.getData("school_id"), this.schoolName],
+        };
+      } else if (this.constructor.name == "Student") {
+        query = {
+          name: "save-student",
+          text: `
+            INSERT INTO students(student_id, student_name, updated_at)
+            VALUES ($1, $2, NOW())
+            ON CONFLICT (student_id)
+            DO UPDATE SET
+              student_name = EXCLUDED.student_name,
+              updated_at = NOW()
+            RETURNING *;
+          `,
+          values: [this.getData("student_id"), this.studentName],
+        };
+      };
+
+      const res = await db.queryDb(query);
+      console.log("Save Successful:", res.rows[0]);
+    } catch (err) {
+      console.error("Error during upsert:", err);
     }
   }
 
