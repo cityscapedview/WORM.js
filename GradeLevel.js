@@ -36,37 +36,37 @@ export class GradeLevel extends Base {
   }
 
   // TODO: abstract to base class and DRY
-  async delete() {
-    try {
-      this.#deleteGradeLevelAff();
-
-      const query = {
-        name: "fetch-by-grade-code",
-        text: "DELETE FROM grade_levels WHERE grade_level_id = $1",
-        values: [this.gradeLevelId],
-      };
-
-      const res = await db.queryDb(query);
-      console.log("Deleted grade level rows successfully:", res.rowCount);
-    } catch (err) {
-      console.error("Error deleting rows:", err);
-    }
-  }
-
-  async #deleteGradeLevelAff() {
-    try {
-      const query = {
-        name: "fetch-by-grade-code",
-        text: "DELETE FROM school_grade_level_aff WHERE grade_level_id = $1",
-        values: [this.gradeLevelId],
-      };
-      const res = await db.queryDb(query);
-      console.log(
-        "Deleted grade level affiliate rows successfully:",
-        res.rowCount,
-      );
-    } catch (err) {
-      console.error("Error deleting rows:", err);
-    }
-  }
+  // async delete() {
+  //   try {
+  //     this.#deleteGradeLevelAff();
+  //
+  //     const query = {
+  //       name: "fetch-by-grade-code",
+  //       text: "DELETE FROM grade_levels WHERE grade_level_id = $1",
+  //       values: [this.gradeLevelId],
+  //     };
+  //
+  //     const res = await db.queryDb(query);
+  //     console.log("Deleted grade level rows successfully:", res.rowCount);
+  //   } catch (err) {
+  //     console.error("Error deleting rows:", err);
+  //   }
+  // }
+  //
+  // async #deleteGradeLevelAff() {
+  //   try {
+  //     const query = {
+  //       name: "fetch-by-grade-code",
+  //       text: "DELETE FROM school_grade_level_aff WHERE grade_level_id = $1",
+  //       values: [this.gradeLevelId],
+  //     };
+  //     const res = await db.queryDb(query);
+  //     console.log(
+  //       "Deleted grade level affiliate rows successfully:",
+  //       res.rowCount,
+  //     );
+  //   } catch (err) {
+  //     console.error("Error deleting rows:", err);
+  //   }
+  // }
 }
