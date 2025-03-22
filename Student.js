@@ -44,19 +44,19 @@ export class Student extends Base {
   }
 
   // TODO: abstract to base class and DRY
-  async delete() {
-    try {
-      const query = {
-        name: "delete-students",
-        text: "DELETE FROM students WHERE student_id = $1",
-        values: [this.studentId],
-      };
-      const res = await db.queryDb(query);
-      console.log("Deleted student rows successfully:", res.rowCount);
-    } catch (err) {
-      console.error("Error deleting rows:", err);
-    }
-  }
+  // async delete() {
+  //   try {
+  //     const query = {
+  //       name: "delete-students",
+  //       text: "DELETE FROM students WHERE student_id = $1",
+  //       values: [this.studentId],
+  //     };
+  //     const res = await db.queryDb(query);
+  //     console.log("Deleted student rows successfully:", res.rowCount);
+  //   } catch (err) {
+  //     console.error("Error deleting rows:", err);
+  //   }
+  // }
 
   async softDelete() {
     try {

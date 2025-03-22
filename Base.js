@@ -166,6 +166,43 @@ export class Base {
     }
   }
 
+  // TODO: abstract to base class and DRY
+  async delete() {
+    try {
+      if (this.constuctor.name == "GradeLevel") {
+      // change private variable access, could it just be in the base class?
+      this.#deleteGradeLevelAff();
+
+      query = {
+        name: "fetch-by-grade-code",
+        text: "DELETE FROM grade_levels WHERE grade_level_id = $1",
+        values: [this.getData("grade_level_id")],
+      };
+      } else if (this.constructor.name == "School") {
+      // change private variable access, could it just be in the base class?
+        this.#deleteRow();
+        this.#deleteStudentRow();
+
+        query = {
+          name: "delete-school",
+          text: "DELETE FROM schools WHERE school_id = $1",
+          values: [this.getdata("school_id")],
+        };
+      } else if (this.constructor.name == "Student") {
+        query = {
+          name: "delete-students",
+          text: "DELETE FROM students WHERE student_id = $1",
+          values: [this.getData("student_id")],
+        };
+      };
+
+      const res = await db.queryDb(query);
+      console.log("Deleted class successfully:", res.rowCount);
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
+  }
+
   getData(fieldName = null) {
     if (fieldName in this.#data) {
       return this.#data[fieldName];
@@ -196,5 +233,57 @@ export class Base {
 
   #snakeToCamel(str) {
     return str.replace(/_([a-z])/g, (match) => match[1].toUpperCase());
+  }
+
+  async #deleteGradeLevelAff() {
+    try {
+      const query = {
+        name: "fetch-by-grade-code",
+        text: "DELETE FROM school_grade_level_aff WHERE grade_level_id = $1",
+        values: [this.getData("grade_level_id")],
+      };
+      const res = await db.queryDb(query);
+      console.log(
+        "Deleted grade level affiliate rows successfully:",
+        res.rowCount,
+      );
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
+  }
+
+  async #deleteRow() {
+    try {
+      const query = {
+        name: "delete-school-row",
+        text: "DELETE FROM school_grade_level_aff WHERE school_id = $1",
+        values: [this.getdata("school_id")],
+      };
+      const res = await db.queryDb(query);
+      console.log(
+        "Deleted grade level affiliation rows successfully:",
+        res.rowCount,
+      );
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
+  }
+
+  // Ask Zach if the intention is to delete all the students in the school?
+  async #deleteStudentRow() {
+    try {
+      const query = {
+        name: "delete-student-row",
+        text: "DELETE FROM students WHERE school_id = $1",
+        values: [this.getdata("school_id")],
+      };
+      const res = await db.queryDb(query);
+      console.log(
+        "Deleted student row affiliated with school successfully:",
+        res.rowCount,
+      );
+    } catch (err) {
+      console.error("Error deleting rows:", err);
+    }
   }
 }

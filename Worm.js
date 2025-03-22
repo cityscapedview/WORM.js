@@ -14,9 +14,9 @@ let db = getInstance();
 
   // 1) Create School
 
-  // const school = await School.create({
-  //   school_name: "Scout Academy",
-  // });
+  const school = await School.create({
+    school_name: "Abeek Academy",
+  });
   // //
   // console.log("Below is the instantiated instance.");
   // console.log(school.getData());
@@ -26,11 +26,11 @@ let db = getInstance();
 
   // 1) Create GradeLevel
 
-  // const gradeLevel = await GradeLevel.create({
-  //   grade_level_code: "1",
-  //   grade_level_name: "first",
-  // });
-  // //
+  const gradeLevel = await GradeLevel.create({
+    grade_level_code: "50",
+    grade_level_name: "abeek",
+  });
+  //
   // console.log("Below is the instantiated instance.");
   // console.log(gradeLevel.getData());
 
@@ -52,11 +52,11 @@ let db = getInstance();
   // console.log("get id:");
   // console.log(school.getId());
 
-  // const student = await Student.create({
-  //   student_name: "Magic Tookie",
-  //   school_id: school.getId(),
-  //   grade_level_id: gradeLevel.getId(),
-  // });
+  const student = await Student.create({
+    student_name: "Abaakie Joe",
+    school_id: school.getId(),
+    grade_level_id: gradeLevel.getId(),
+  });
 
   // console.log(student.getData());
 
@@ -79,16 +79,16 @@ let db = getInstance();
 
   // 4) Save Method
 
-  const schoolChosen = await School.find(44);
-  console.log("school chosen!");
-  console.log(schoolChosen);
-  // console.log(schoolChosen.getData());
-
-  schoolChosen.setData({ school_name: "Tookerbacker Uni" });
-
-  await schoolChosen.save();
-  console.log("shool after save:");
-  console.log(schoolChosen);
+  // const schoolChosen = await School.find(44);
+  // console.log("school chosen!");
+  // console.log(schoolChosen);
+  // // console.log(schoolChosen.getData());
+  //
+  // schoolChosen.setData({ school_name: "Tookerbacker Uni" });
+  //
+  // await schoolChosen.save();
+  // console.log("shool after save:");
+  // console.log(schoolChosen);
 
   // const student = await Student.find(14);
   // console.log(student);
@@ -142,13 +142,13 @@ let db = getInstance();
 
   // 8) delete function.
 
-  // const kinder = await GradeLevel.findByCode("K");
-  // await kinder.delete();
+  const kinder = await GradeLevel.findByCode("50");
+  await kinder.delete();
 
-  // const stu = await Student.find(3);
-  // const aSchool = await stu.getSchool();
-  // await stu.delete();
-  // await school.delete();
+  const stu = await Student.find(4);
+  const aSchool = await stu.getSchool();
+  await stu.delete();
+  await school.delete();
 
   // 9) We need a way to soft delete and restore schools
   // and students via the softDelete and restore methods.

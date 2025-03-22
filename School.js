@@ -16,81 +16,81 @@ export class School extends Base {
     },
   };
 
-  async updateGradeLevels(gradeLevels) {
-    try {
-      this.#deleteRow();
-
-      for (let i = 0; i < gradeLevels.length; i++) {
-        const query = {
-          name: "update-grade-level",
-          text: `INSERT INTO school_grade_level_aff (school_id, grade_level_id) VALUES ($1, $2)`,
-          values: [this.schoolId, gradeLevels[i].gradeLevelId],
-        };
-        const res = await db.queryDb(query);
-        console.log(
-          "Updated grade level affiliation successfully:",
-          res.rowCount,
-        );
-      }
-
-      await this.save();
-    } catch (err) {
-      console.error("Error updating grade levels:", err);
-    }
-  }
+  // async updateGradeLevels(gradeLevels) {
+  //   try {
+  //     this.#deleteRow();
+  //
+  //     for (let i = 0; i < gradeLevels.length; i++) {
+  //       const query = {
+  //         name: "update-grade-level",
+  //         text: `INSERT INTO school_grade_level_aff (school_id, grade_level_id) VALUES ($1, $2)`,
+  //         values: [this.schoolId, gradeLevels[i].gradeLevelId],
+  //       };
+  //       const res = await db.queryDb(query);
+  //       console.log(
+  //         "Updated grade level affiliation successfully:",
+  //         res.rowCount,
+  //       );
+  //     }
+  //
+  //     await this.save();
+  //   } catch (err) {
+  //     console.error("Error updating grade levels:", err);
+  //   }
+  // }
 
   // TODO: abstract to base class and DRY
-  async delete() {
-    try {
-      this.#deleteRow();
-      this.#deleteStudentRow();
+  // async delete() {
+  //   try {
+  //     this.#deleteRow();
+  //     this.#deleteStudentRow();
+  //
+  //     const query = {
+  //       name: "delete-school",
+  //       text: "DELETE FROM schools WHERE school_id = $1",
+  //       values: [this.schoolId],
+  //     };
+  //     const res = await db.queryDb(query);
+  //     console.log("Deleted school rows successfully:", res.rowCount);
+  //   } catch (err) {
+  //     console.error("Error deleting rows:", err);
+  //   }
+  // }
 
-      const query = {
-        name: "delete-school",
-        text: "DELETE FROM schools WHERE school_id = $1",
-        values: [this.schoolId],
-      };
-      const res = await db.queryDb(query);
-      console.log("Deleted school rows successfully:", res.rowCount);
-    } catch (err) {
-      console.error("Error deleting rows:", err);
-    }
-  }
-
-  async #deleteRow() {
-    try {
-      const query = {
-        name: "delete-school-row",
-        text: "DELETE FROM school_grade_level_aff WHERE school_id = $1",
-        values: [this.schoolId],
-      };
-      const res = await db.queryDb(query);
-      console.log(
-        "Deleted grade level affiliation rows successfully:",
-        res.rowCount,
-      );
-    } catch (err) {
-      console.error("Error deleting rows:", err);
-    }
-  }
-
-  // Ask Zach if the intention is to delete all the students in the school?
-  async #deleteStudentRow() {
-    try {
-      const query = {
-        name: "delete-student-row",
-        text: "DELETE FROM students WHERE school_id = $1",
-        values: [this.schoolId],
-      };
-      const res = await db.queryDb(query);
-      console.log(
-        "Deleted student row affiliated with school successfully:",
-        res.rowCount,
-      );
-    } catch (err) {
-      console.error("Error deleting rows:", err);
-    }
-  }
+  // async #deleteRow() {
+  //   try {
+  //     const query = {
+  //       name: "delete-school-row",
+  //       text: "DELETE FROM school_grade_level_aff WHERE school_id = $1",
+  //       values: [this.schoolId],
+  //     };
+  //     const res = await db.queryDb(query);
+  //     console.log(
+  //       "Deleted grade level affiliation rows successfully:",
+  //       res.rowCount,
+  //     );
+  //   } catch (err) {
+  //     console.error("Error deleting rows:", err);
+  //   }
+  // }
+  //
+  // // Ask Zach if the intention is to delete all the students in the school?
+  // async #deleteStudentRow() {
+  //   try {
+  //     const query = {
+  //       name: "delete-student-row",
+  //       text: "DELETE FROM students WHERE school_id = $1",
+  //       values: [this.schoolId],
+  //     };
+  //     const res = await db.queryDb(query);
+  //     console.log(
+  //       "Deleted student row affiliated with school successfully:",
+  //       res.rowCount,
+  //     );
+  //   } catch (err) {
+  //     console.error("Error deleting rows:", err);
+  //   }
+  // }
 
   async softDelete() {
     try {
